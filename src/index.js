@@ -12,6 +12,7 @@ const port = process.env.PORT || 3000
 //this sets up auto-parsing on requests
 app.use(express.json())
 
+//router we want to use
 app.use(playerRouter)
 
 //run the server

@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+
+//ip address instead of localhost
 const connectionURL = 'mongodb://127.0.0.1:27017/nba-api'
 
 mongoose.connect(connectionURL, {
