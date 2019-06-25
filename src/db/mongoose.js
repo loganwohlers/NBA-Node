@@ -6,6 +6,6 @@ mongoose.connect(connectionURL, {
     useCreateIndex: true,
     useFindAndModify: false
 }).then(() => {
-    console.log('connected properly')
+    console.log('connected to MongoDB')
     // const db = mongoose.connection.db
 }).catch(e => console.log(e))
