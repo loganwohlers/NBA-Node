@@ -1,5 +1,6 @@
 const cheerio = require('cheerio')
 const request = require('request')
+//request promise here?
 
 const data = []
 
@@ -20,7 +21,9 @@ request(url, (err, res, html) => {
             data.push(row)
         })
         console.log(data)
-
     }
 })
 
+seedDB = (arr) => {
+
+}
