@@ -21,7 +21,7 @@ router.get('/playerseasons/:id', async (req, res) => {
         //     console.log('Story title: ', story.title);
         //     console.log('Story creator', story.person.name);
         // });
-        const ps = await PlayerSeason.findById(_id).populate('player_id', 'name')
+        const ps = await PlayerSeason.findById(_id).populate('player', 'name')
         if (!ps) {
             return res.status(404).send()
         }

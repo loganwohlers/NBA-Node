@@ -3,10 +3,6 @@ const { Player, playerSchema } = require('./player')
 
 const playerSeasonSchema = new mongoose.Schema({
     player: {
-        type: String,
-        default: 0
-    },
-    player_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Player',
         required: true

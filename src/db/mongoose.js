@@ -29,8 +29,7 @@ mongoose.connect(connectionURL, {
                 name
             })
             player.save().then(() => console.log(player))
-            let obj = { ...data[i], player_id: player._id }
-            console.log(obj)
+            let obj = { ...data[i], player: player._id }
             PlayerSeason.create(obj).then(() => console.log('made ps?'))
         }
         console.log('seeded names')
