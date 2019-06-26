@@ -1,5 +1,4 @@
 const cheerio = require('cheerio')
-// const tableParser = require('cheerio-tableparser')
 const request = require('request')
 
 const data = []
