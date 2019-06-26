@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Player = require('../models/player')
-const { PlayerSeason } = require('../models/player')
+const { PlayerSeason } = require('../models/player-season')
 
 const scrapePlayerSeasons = require('../../scrape/player-season')
 
@@ -12,14 +12,17 @@ mongoose.connect(connectionURL, {
     useCreateIndex: true,
     useFindAndModify: false
 }).then(() => {
-    const db = mongoose.connection.db
-    db.dropCollection('players')
     console.log('connected to MongoDB')
+
+    const db = mongoose.connection.db
+    //clearing out players collection for a re-seed.  not the right way to do this probably
+    db.dropCollection('players')
+    db.dropCollection('playerseasons')
 
     //the .then here should be it's own fn-- also might want to try insertMany
     scrapePlayerSeasons(2019).then(dd => {
         data = dd.filter(d => d.player)
-        console.log(data.length)
+        console.log(data.length, data[0])
         for (let i = 0; i < data.length; i++) {
             let name = data[i].player
             let player = new Player({
@@ -28,10 +31,10 @@ mongoose.connect(connectionURL, {
             player.save()
         }
         console.log('seeded names')
+        PlayerSeason.insertMany(data).then(() => console.log('seeded ps ?'))
+
     }).catch(e => {
         console.log(e)
     })
-
-
 }).catch(e => console.log(e))
 

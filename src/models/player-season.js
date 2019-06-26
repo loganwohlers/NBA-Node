@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const playerSeasonSchema = new mongoose.Schema({
-    name: {
+    player: {
         type: String,
         default: 0
     },
