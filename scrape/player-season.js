@@ -19,7 +19,6 @@ scrapePlayerSeasons = async (yr) => {
             let statName = $(ele).data().stat
             let statVal = $(ele).text()
             row[statName] = statVal
-
         })
         result.push(row)
     })

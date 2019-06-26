@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Player = require('../models/player')
+const { PlayerSeason } = require('../models/player')
 
 const scrapePlayerSeasons = require('../../scrape/player-season')
 
@@ -14,23 +15,23 @@ mongoose.connect(connectionURL, {
     const db = mongoose.connection.db
     db.dropCollection('players')
     console.log('connected to MongoDB')
+
+    //the .then here should be it's own fn-- also might want to try insertMany
     scrapePlayerSeasons(2019).then(dd => {
         data = dd.filter(d => d.player)
         console.log(data.length)
         for (let i = 0; i < data.length; i++) {
             let name = data[i].player
-            if (name) {
-                let player = new Player({
-                    name
-                })
-                player.save()
-            }
+            let player = new Player({
+                name
+            })
+            player.save()
         }
         console.log('seeded names')
     }).catch(e => {
         console.log(e)
     })
-    //seed here?
+
 
 }).catch(e => console.log(e))
 
