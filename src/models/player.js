@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { playerSeasonSchema } = require('./player-season')
+const { PlayerSeason, playerSeasonSchema } = require('./player-season')
 
 const playerSchema = new mongoose.Schema({
     name: {
@@ -7,12 +7,12 @@ const playerSchema = new mongoose.Schema({
         trim: true,
         required: true
     },
-    seasons: [playerSeasonSchema]
+    seasons: [{ type: mongoose.Schema.Types.ObjectId, ref: 'PlayerSeason' }]
 })
 
 const Player = mongoose.model('Player', playerSchema)
 
-module.exports = Player
+module.exports = { Player, playerSchema }
 
 // Team:
 //     name:

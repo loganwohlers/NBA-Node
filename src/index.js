@@ -4,7 +4,7 @@ const express = require('express')
 //it still runs this file-- which is where we connect to our db 
 require('./db/mongoose')
 
-const { playerRouter } = require('./routers')
+const { playerRouter, playerSeasonsRouter } = require('./routers')
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -14,6 +14,7 @@ app.use(express.json())
 
 //router we want to use
 app.use(playerRouter)
+app.use(playerSeasonsRouter)
 
 //run the server
 app.listen(port, () => {

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Player = require('../models/player')
+const { Player } = require('../models/player')
 const { PlayerSeason } = require('../models/player-season')
 
 const scrapePlayerSeasons = require('../../scrape/player-season')
@@ -28,13 +28,13 @@ mongoose.connect(connectionURL, {
             let player = new Player({
                 name
             })
-            player.save()
+            player.save().then(() => console.log(player))
             let obj = { ...data[i], player_id: player._id }
             console.log(obj)
             PlayerSeason.create(obj).then(() => console.log('made ps?'))
         }
         console.log('seeded names')
-        // PlayerSeason.insertMany(data).then(() => console.log('seeded ps ?'))
+
 
     }).catch(e => {
         console.log(e)
