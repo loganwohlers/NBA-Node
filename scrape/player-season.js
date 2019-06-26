@@ -1,29 +1,44 @@
 const cheerio = require('cheerio')
-const request = require('request')
-//request-promise here?
+const request = require('request-promise')
 
-const data = []
+// const { PlayerSeason } = require('../src/models/player-season')
 
-const url = 'https://www.basketball-reference.com/leagues/NBA_2019_per_game.html'
-
-request(url, (err, res, html) => {
-    if (!err && res.statusCode === 200) {
-        const $ = cheerio.load(html)
-        const tableBody = $('#per_game_stats').children('tbody')
-        tableBody.find('tr').each((index, ele) => {
-            let row = {}
-            $(ele).find('td').each((index, ele) => {
-                let statName = $(ele).data().stat
-                let statVal = $(ele).text()
-                row[statName] = statVal
-
-            })
-            data.push(row)
-        })
-        console.log(data)
+scrapePlayerSeasons = async (yr) => {
+    const result = []
+    const url = 'https://www.basketball-reference.com/leagues/NBA_' + yr + '_per_game.html'
+    let data
+    try {
+        data = await request(url)
+    } catch (e) {
+        return console.log(e)
     }
+    const $ = cheerio.load(data)
+    const tableBody = $('#per_game_stats').children('tbody')
+    tableBody.find('tr').each((index, ele) => {
+        let row = {}
+        $(ele).find('td').each((index, ele) => {
+            let statName = $(ele).data().stat
+            let statVal = $(ele).text()
+            row[statName] = statVal
+
+        })
+        result.push(row)
+    })
+    console.log('dnoe')
+    return result
+}
+
+let x
+scrapePlayerSeasons(2019).then((data) => {
+    x = data
+    console.log(x)
 })
 
-seedDB = (arr) => {
+// seedPlayerSeasons = (arr) => {
+//     const test = new PlayerSeason(arr[0])
+//     test.save().then(() => {
+//         console.log(test)
+//     })
+// }
 
-}
+

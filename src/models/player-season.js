@@ -1,6 +1,14 @@
 const mongoose = require('mongoose')
 
-const schema = new mongoose.Schema({
+const playerSeasonSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        default: 0
+    },
+    team_id: {
+        type: String,
+        default: 0
+    },
     age: {
         type: String,
         default: 18
@@ -108,8 +116,7 @@ const schema = new mongoose.Schema({
 
 })
 
-const PlayerSeason = mongoose.model('PlayerSeason', schema)
+const PlayerSeason = mongoose.model('PlayerSeason', playerSeasonSchema)
 
-
-module.exports = PlayerSeason
+module.exports = { PlayerSeason, playerSeasonSchema }
 
