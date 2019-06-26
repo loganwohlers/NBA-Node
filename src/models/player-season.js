@@ -5,6 +5,10 @@ const playerSeasonSchema = new mongoose.Schema({
         type: String,
         default: 0
     },
+    player_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
     team_id: {
         type: String,
         default: 0

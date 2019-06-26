@@ -23,15 +23,18 @@ mongoose.connect(connectionURL, {
     scrapePlayerSeasons(2019).then(dd => {
         data = dd.filter(d => d.player)
         console.log(data.length, data[0])
-        for (let i = 0; i < data.length; i++) {
+        for (let i = 0; i < 1; i++) {
             let name = data[i].player
             let player = new Player({
                 name
             })
             player.save()
+            let obj = { ...data[i], player_id: player._id }
+            console.log(obj)
+            PlayerSeason.create(obj).then(() => console.log('made ps?'))
         }
         console.log('seeded names')
-        PlayerSeason.insertMany(data).then(() => console.log('seeded ps ?'))
+        // PlayerSeason.insertMany(data).then(() => console.log('seeded ps ?'))
 
     }).catch(e => {
         console.log(e)
