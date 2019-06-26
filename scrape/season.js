@@ -1,12 +1,12 @@
 const cheerio = require('cheerio')
-const rp = require('request-promise')
+const request = require('request-promise')
 
 seedMonth = async (month, yr) => {
     const results = []
     let data
     const url = 'https://www.basketball-reference.com/leagues/NBA_' + yr + '_games-' + month + '.html'
     try {
-        data = await rp(url)
+        data = await request(url)
     } catch (e) {
         return console.log(e)
     }
@@ -24,7 +24,7 @@ seedMonth = async (month, yr) => {
     return results
 }
 
-//error handling not working yet and there are empty rows in here
+//go to [1229] for last game of season
 seedSeason = async (yr) => {
     const months = ['october', 'november', 'december', 'january', 'february', 'march', 'april']
     let results = []
