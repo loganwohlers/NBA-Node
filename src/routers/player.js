@@ -3,6 +3,7 @@ const Player = require('../models/player')
 
 const router = new express.Router()
 
+//index
 router.get('/players', async (req, res) => {
     try {
         const players = await Player.find({})
@@ -12,13 +13,27 @@ router.get('/players', async (req, res) => {
     }
 })
 
-router.post('/players', async (req, res) => {
+//show
+router.get('/players/:id', async (req, res) => {
+    const _id = req.params.id
     try {
-        const players = await Player.find({})
-        res.send(players)
+        const player = await Player.findById(_id)
+        if (!player) {
+            return res.status(404).send()
+        }
+        res.send(player)
     } catch (e) {
-        res.status(400).send('service down')
+        res.status(500).send()
     }
 })
+
+// router.post('/players', async (req, res) => {
+//     try {
+//         const players = await Player.find({})
+//         res.send(players)
+//     } catch (e) {
+//         res.status(400).send('service down')
+//     }
+// })
 
 module.exports = router
