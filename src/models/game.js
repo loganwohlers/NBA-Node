@@ -7,6 +7,7 @@ const schema = new mongoose.Schema({
         required: true
     }
 })
+//teams,score, time, location,  boxscore [] of lines
 
 const Game = mongoose.model('Game', schema)
 

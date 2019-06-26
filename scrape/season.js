@@ -26,19 +26,20 @@ seedMonth = async (month, yr) => {
 
 //error handling not working yet and there are empty rows in here
 seedSeason = async (yr) => {
-    const months = ['october', 'november', 'december', 'january', 'february', 'march', 'april', 'may', 'june']
+    const months = ['october', 'november', 'december', 'january', 'february', 'march', 'april']
     let results = []
     for (let i = 0; i < months.length; i++) {
         const data = await seedMonth(months[i], yr)
         results.push(data)
     }
-    console.log(results.length)
-    console.log(results.flat().length)
+    results = results.flat()
+    console.log(results[1229])
     return results
 }
 
 
-seedSeason(2017)
+seedSeason(2019)
+
 
 
 

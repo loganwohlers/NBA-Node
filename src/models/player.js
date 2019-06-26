@@ -1,11 +1,15 @@
 const mongoose = require('mongoose')
 
+//this is a model- not a Schema?
+const PlayerSeason = require('./player-season')
+
 const schema = new mongoose.Schema({
     name: {
         type: String,
         trim: true,
         required: true
-    }
+    },
+    seasons: [PlayerSeason]
 })
 
 const Player = mongoose.model('Player', schema)
@@ -18,6 +22,8 @@ module.exports = Player
 //     city:
 //     conference:
 //     division:
+
+    //child
 //     teamSeasons[]
 
 // TeamSeasons: 
@@ -39,4 +45,6 @@ module.exports = Player
 // player:
     // name: {}
     // currTeam: {}
+
+    //child
     // playerSeasons: []

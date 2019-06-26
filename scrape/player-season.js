@@ -1,6 +1,6 @@
 const cheerio = require('cheerio')
 const request = require('request')
-//request promise here?
+//request-promise here?
 
 const data = []
 

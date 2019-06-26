@@ -1,11 +1,6 @@
 const mongoose = require('mongoose')
 
 const schema = new mongoose.Schema({
-    player: {
-        type: String,
-        trim: true,
-        required: true
-    },
     age: {
         type: String,
         default: 18
