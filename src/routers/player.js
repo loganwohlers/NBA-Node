@@ -27,13 +27,6 @@ router.get('/players/:id', async (req, res) => {
     }
 })
 
-// router.post('/players', async (req, res) => {
-//     try {
-//         const players = await Player.find({})
-//         res.send(players)
-//     } catch (e) {
-//         res.status(400).send('service down')
-//     }
-// })
+
 
 module.exports = router

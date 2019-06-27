@@ -22,17 +22,17 @@ mongoose.connect(connectionURL, {
     //the .then here should be it's own fn-- also might want to try insertMany
     scrapePlayerSeasons(2019).then(dd => {
         data = dd.filter(d => d.player)
-        console.log(data.length, data[0])
-        for (let i = 0; i < 1; i++) {
+        for (let i = 0; i < data.length; i++) {
             let name = data[i].player
+            console.log(name)
             let player = new Player({
                 name
             })
-            player.save().then(() => console.log(player))
+            player.save()
             let obj = { ...data[i], player: player._id }
-            PlayerSeason.create(obj).then(() => console.log('made ps?'))
+            PlayerSeason.create(obj)
         }
-        console.log('seeded names')
+        console.log('seeded players/ps')
 
 
     }).catch(e => {

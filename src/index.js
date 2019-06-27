@@ -12,9 +12,22 @@ const port = process.env.PORT || 3000
 //this sets up auto-parsing on requests
 app.use(express.json())
 
-//router we want to use
+const router = new express.Router()
+
+//routers we want to use
+app.use(router)
 app.use(playerRouter)
 app.use(playerSeasonsRouter)
+
+//dummy router for homepage
+router.get('/', async (req, res) => {
+    try {
+        res.send('HOMEPAGE!!')
+    } catch (e) {
+        res.status(400).send('service down')
+    }
+})
+
 
 //run the server
 app.listen(port, () => {
