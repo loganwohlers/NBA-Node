@@ -20,10 +20,15 @@ mongoose.connect(connectionURL, {
     db.dropCollection('players')
     db.dropCollection('teams')
 
+    //team insertion stuff needs to happen before-- to avoid async issues
     Team.insertMany(teams).then(() => {
         console.log('teams seeded')
-        Team.findOne({ teamCode: 'ATL' }).then(doc => {
-            console.log(doc)
+        Team.findOne({ teamCode: 'ATZ' }).then(doc => {
+            if (doc) {
+                console.log(doc)
+            } else {
+                console.log('nothing FOUND!!!')
+            }
         })
     }).catch(e => console.log(e))
 
