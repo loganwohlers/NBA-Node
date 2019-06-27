@@ -56,17 +56,23 @@ dbSetUp = async (connectionURL) => {
         return console.log(e)
     }
     let data = scrapedData.filter(d => d.player)
-    for (let i = 700; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
         let name = data[i].player
-        let players = await Player.find({})
-        console.log('all players:', players)
+
+        //this is a strange mongo thing-- it doesn't like when you work with the same
+        //doc multiple times in a row?  by doing a new query here for nothing the program
+        //works as expected
+        let players = await Player.findOne({})
+
+
         let player = await Player.findOne({ name })
-        console.log(player)
+        // console.log(player)
         if (!player) {
             player = new Player({
                 name
             })
         } else {
+            //duped player
             console.log(player.name)
         }
 
