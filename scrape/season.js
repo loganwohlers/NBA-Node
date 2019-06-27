@@ -13,13 +13,20 @@ seedMonth = async (month, yr) => {
     const $ = cheerio.load(data)
     const tableBody = $('#schedule').children('tbody')
     tableBody.find('tr').each((index, ele) => {
-        let row = {}
-        $(ele).find('td').each((index, ele) => {
-            let statName = $(ele).data().stat
-            let statVal = $(ele).text()
-            row[statName] = statVal
-        })
-        results.push(row)
+        let th = $(ele).find('th')
+        let data = $(th).attr('csk')
+        if (data) {
+            let row = {}
+            row.gameCode = data
+            row.date = data.slice(0, -4)
+            $(ele).find('td').each((index, ele) => {
+                let statName = $(ele).data().stat
+                let statVal = $(ele).text()
+                row[statName] = statVal
+            })
+            console.log(row)
+            results.push(row)
+        }
     })
     return results
 }
