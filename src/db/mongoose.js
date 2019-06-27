@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const { Player } = require('../models/player')
-const { PlayerSeason } = require('../models/player-season')
-
+const { Team } = require('../models/team')
+const teams = require('../../assets/teams')
 const scrapePlayerSeasons = require('../../scrape/player-season')
 
 //ip address instead of localhost
@@ -17,9 +17,13 @@ mongoose.connect(connectionURL, {
     const db = mongoose.connection.db
     //clearing out players collection for a re-seed.  not the right way to do this probably
     db.dropCollection('players')
+    db.dropCollection('teams')
 
+    Team.insertMany(teams).then(() => console.log('teams seeded'))
+        .catch(e => console.log(e))
     //the .then here should be it's own fn-- also might want to try insertMany
     //need to stop dupe players-- want them to just update their seasons
+
     scrapePlayerSeasons(2019).then(dd => {
         data = dd.filter(d => d.player)
         for (let i = 0; i < data.length; i++) {
@@ -32,7 +36,7 @@ mongoose.connect(connectionURL, {
             player.seasons.push(obj)
             player.save()
         }
-        console.log('seeded players/ps')
+        console.log('seeded players/seasons')
     }).catch(e => {
         console.log(e)
     })

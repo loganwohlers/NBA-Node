@@ -1,4 +1,4 @@
-[
+const teams = [
     {
         "teamCode": "ATL",
         "city": "Atlanta",
@@ -240,3 +240,5 @@
         "name": "Wizards"
     }
 ]
+
+module.exports = teams
