@@ -1,7 +1,10 @@
 const mongoose = require('mongoose')
-const { Player, Team, Season } = require('../models')
+
+const { Player, Team, Season, Game } = require('../models')
+
 const teams = require('../../assets/teams')
 const scrapePlayerSeasons = require('../../scrape/player-season')
+const scrapeSeason = require('../../scrape/season')
 
 //ip address instead of localhost
 const URL = 'mongodb://127.0.0.1:27017/nba-api'
@@ -17,12 +20,55 @@ seedDB = async (connectionURL) => {
         return console.log(e)
     }
     const db = mongoose.connection.db
-    db.dropCollection('players')
-    // db.dropCollection('teams')
 
+    db.dropCollection('players')
+
+    // db.dropCollection('seasons')
+    // console.log('seeding season')
+    // await seedSeason()
+
+    // db.dropCollection('teams')
+    // console.log('seeding teams')
     // await seedTeams()
+
+    console.log('seeding players')
     await seedPlayers(2019)
+    await seedSchedule(2019)
     console.log('db seeded')
+}
+
+seedSchedule = async (yr) => {
+    let seasonData
+    let season
+    try {
+        seasonData = await scrapeSeason(2019)
+        season = await Season.findOne({ year: yr })
+    } catch (e) {
+        return console.log(e)
+    }
+
+    let dataObj = [...seasonData]
+    for (let i = 0; i < dataObj.length; i++) {
+        let { home_team_name, visitor_team_name } = dataObj[i]
+        let homeTeam = await Team.findOne({ fullName: home_team_name })
+        let awayTeam = await Team.findOne({ fullName: visitor_team_name })
+
+        dataObj[i].home_team = homeTeam._id
+        dataObj[i].away_team = awayTeam._id
+        dataObj[i].season = season._id
+        // let game = new Game(
+        //     dataObj[i]
+        // )
+
+        try {
+            let saved = await Game.insertMany(dataObj)
+            console.log('games seeded!')
+
+        } catch (e) {
+            return console.log(e)
+        }
+    }
+
 }
 
 seedTeams = async () => {
@@ -78,23 +124,10 @@ seedPlayers = async (yr) => {
     }
 }
 
-seedRandom = async (connectionURL) => {
-    try {
-        await mongoose.connect(connectionURL, {
-            useNewUrlParser: true,
-            useCreateIndex: true,
-            useFindAndModify: false
-        })
-    } catch (e) {
-        return console.log(e)
-    }
-
-    // const db = mongoose.connection.db
-    // db.dropCollection('teams')
-
+seedSeason = async () => {
     try {
         let season = new Season({ year: 2019, description: '2018-2019 NBA Season' })
-        season.save()
+        return season.save()
     } catch (e) {
         return console.log(e)
     }

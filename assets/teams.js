@@ -100,7 +100,7 @@ const teams = [
         "city": "Los Angeles",
         "conference": "West",
         "division": "Pacific",
-        "fullName": "LA Clippers",
+        "fullName": "Los Angeles Clippers",
         "name": "Clippers"
     },
     {

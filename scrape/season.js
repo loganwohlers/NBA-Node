@@ -24,7 +24,6 @@ seedMonth = async (month, yr) => {
                 let statVal = $(ele).text()
                 row[statName] = statVal
             })
-            console.log(row)
             results.push(row)
         }
     })
@@ -32,7 +31,7 @@ seedMonth = async (month, yr) => {
 }
 
 //go to [1229] for last game of season
-seedSeason = async (yr) => {
+scrapeSeason = async (yr) => {
     const months = ['october', 'november', 'december', 'january', 'february', 'march', 'april']
     let results = []
     for (let i = 0; i < months.length; i++) {
@@ -40,12 +39,11 @@ seedSeason = async (yr) => {
         results.push(data)
     }
     results = results.flat()
-    console.log(results[1229])
-    return results
+    return results.slice(0, 1230)
 }
 
 
-seedSeason(2019)
+module.exports = scrapeSeason
 
 
 
