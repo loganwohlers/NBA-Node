@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
-const { Player } = require('../models/player')
-const { Team } = require('../models/team')
+const { Player, Team } = require('../models')
 const teams = require('../../assets/teams')
 const scrapePlayerSeasons = require('../../scrape/player-season')
 
@@ -57,31 +56,36 @@ dbSetUp = async (connectionURL) => {
         return console.log(e)
     }
     let data = scrapedData.filter(d => d.player)
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 700; i < data.length; i++) {
         let name = data[i].player
         console.log(name)
-        let player = await Player.findOne({ name })
-        if (!player) {
-            player = new Player({
-                name
-            })
-        }
-        let obj = { ...data[i] }
-        //TOT=Total Over Teams-- average stats of one player across multiple teams in a season
-        //might add later but not now
-        if (obj.team_id !== 'TOT') {
-            let team = await Team.findOne({ teamCode: obj.team_id })
-            if (team) {
-                obj.team = team._id
-                player.seasons.push(obj)
-                player.save()
-            } else {
-                return console.log('could not find team code')
-            }
-        }
+        let players = await Player.find({})
+        console.log(players)
+        // if (!player) {
+        //     player = new Player({
+        //         name
+        //     })
+        // } else {
+        //     console.log(player.name)
+        // }
+
+        // let obj = { ...data[i] }
+        // //TOT=Total Over Teams-- average stats of one player across multiple teams in a season
+        // //might add later but not now
+        // if (obj.team_id !== 'TOT') {
+        //     let team = await Team.findOne({ teamCode: obj.team_id })
+        //     if (team) {
+        //         obj.team = team._id
+        //         player.seasons.push(obj)
+        //         player.save()
+        //     } else {
+        //         return console.log('could not find team code')
+        //     }
+        // }
     }
     console.log('seeded players/seasons')
 }
 
 // seedTeams(URL)
+
 dbSetUp(URL)
