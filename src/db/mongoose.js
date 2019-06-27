@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { Player, Team } = require('../models')
+const { Player, Team, Season } = require('../models')
 const teams = require('../../assets/teams')
 const scrapePlayerSeasons = require('../../scrape/player-season')
 
@@ -26,9 +26,8 @@ seedTeams = async (connectionURL) => {
     } catch (e) {
         return console.log(e)
     }
-
-
 }
+
 //rewrite everything w/o then?
 dbSetUp = async (connectionURL) => {
     try {
@@ -50,8 +49,10 @@ dbSetUp = async (connectionURL) => {
     //the .then here should be it's own fn-- maybe create arr of players and then do a mass insertMany?
     //need to stop dupe players-- want them to just update their seasons
     let scrapedData
+    let season
     try {
         scrapedData = await scrapePlayerSeasons(2019)
+        season = await Season.findOne({ year: 2019 })
     } catch (e) {
         return console.log(e)
     }
@@ -61,19 +62,15 @@ dbSetUp = async (connectionURL) => {
 
         //this is a strange mongo thing-- it doesn't like when you work with the same
         //doc multiple times in a row?  by doing a new query here for nothing the program
-        //works as expected
+        //works as expected*****fix
         let players = await Player.findOne({})
 
-
         let player = await Player.findOne({ name })
-        // console.log(player)
+        //checking for if this player exists
         if (!player) {
             player = new Player({
                 name
             })
-        } else {
-            //duped player
-            console.log(player.name)
         }
 
         let obj = { ...data[i] }
@@ -84,6 +81,7 @@ dbSetUp = async (connectionURL) => {
             let team = await Team.findOne({ teamCode: obj.team_id })
             if (team) {
                 obj.team = team._id
+                obj.season = season._id
                 player.seasons.push(obj)
                 player.save()
             } else {
@@ -94,7 +92,29 @@ dbSetUp = async (connectionURL) => {
     console.log('seeded players/seasons')
 }
 
+seedRandom = async (connectionURL) => {
+    try {
+        await mongoose.connect(connectionURL, {
+            useNewUrlParser: true,
+            useCreateIndex: true,
+            useFindAndModify: false
+        })
+    } catch (e) {
+        return console.log(e)
+    }
 
+    // const db = mongoose.connection.db
+    // db.dropCollection('teams')
+
+    try {
+        let season = new Season({ year: 2019, description: '2018-2019 NBA Season' })
+        season.save()
+    } catch (e) {
+        return console.log(e)
+    }
+}
+
+// seedRandom(URL)
 // seedTeams(URL)
 
 dbSetUp(URL)

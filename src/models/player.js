@@ -5,6 +5,10 @@ const playerSeasonSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Team',
     },
+    season: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Season',
+    },
     age: {
         type: String,
         default: 18

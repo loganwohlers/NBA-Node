@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const seasonSchema = new mongoose.Schema({
     year: {
         type: Number,
+        unique: true
     },
     description: {
         type: String,
