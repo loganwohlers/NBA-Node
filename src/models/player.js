@@ -120,7 +120,6 @@ const playerSchema = new mongoose.Schema({
     name: {
         type: String,
         trim: true,
-        unique: true,
         required: true
     },
     seasons: [playerSeasonSchema]
