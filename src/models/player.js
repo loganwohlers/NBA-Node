@@ -7,7 +7,7 @@ const playerSchema = new mongoose.Schema({
         trim: true,
         required: true
     },
-    seasons: [{ type: mongoose.Schema.Types.ObjectId, ref: 'PlayerSeason' }]
+    seasons: [playerSeasonSchema]
 })
 
 const Player = mongoose.model('Player', playerSchema)

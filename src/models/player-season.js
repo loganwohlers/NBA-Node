@@ -1,12 +1,6 @@
 const mongoose = require('mongoose')
-const { Player, playerSchema } = require('./player')
 
 const playerSeasonSchema = new mongoose.Schema({
-    player: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Player',
-        required: true
-    },
     team_id: {
         type: String,
         default: 0
@@ -15,11 +9,15 @@ const playerSeasonSchema = new mongoose.Schema({
         type: String,
         default: 18
     },
-    gp: {
+    g: {
         type: String,
         default: 0
     },
-    position: {
+    gs: {
+        type: String,
+        default: 0
+    },
+    pos: {
         type: String,
         default: 0
     },

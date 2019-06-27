@@ -17,9 +17,9 @@ mongoose.connect(connectionURL, {
     const db = mongoose.connection.db
     //clearing out players collection for a re-seed.  not the right way to do this probably
     db.dropCollection('players')
-    db.dropCollection('playerseasons')
 
     //the .then here should be it's own fn-- also might want to try insertMany
+    //need to stop dupe players-- want them to just update their seasons
     scrapePlayerSeasons(2019).then(dd => {
         data = dd.filter(d => d.player)
         for (let i = 0; i < data.length; i++) {
@@ -28,13 +28,11 @@ mongoose.connect(connectionURL, {
             let player = new Player({
                 name
             })
-            player.save()
             let obj = { ...data[i], player: player._id }
-            PlayerSeason.create(obj)
+            player.seasons.push(obj)
+            player.save()
         }
         console.log('seeded players/ps')
-
-
     }).catch(e => {
         console.log(e)
     })
