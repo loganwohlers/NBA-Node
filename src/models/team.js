@@ -27,11 +27,6 @@ const teamSchema = new mongoose.Schema({
     }
 })
 
-// //helper query fn attempt
-// teamSchema.query.byCode = function (code) {
-//     return this.where({ teamCode: code });
-// };
-
 const Team = mongoose.model('Team', teamSchema)
 
 module.exports = { Team, teamSchema }

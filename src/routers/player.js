@@ -6,7 +6,7 @@ const router = new express.Router()
 //index
 router.get('/players', async (req, res) => {
     try {
-        const players = await Player.find({}).populate('seasons.team_id')
+        const players = await Player.find({}).populate('seasons.team')
         res.send(players)
     } catch (e) {
         res.status(400).send('service down')

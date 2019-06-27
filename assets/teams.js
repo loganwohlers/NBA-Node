@@ -16,7 +16,7 @@ const teams = [
         "name": "Celtics"
     },
     {
-        "teamCode": "BKN",
+        "teamCode": "BRK",
         "city": "Brooklyn",
         "conference": "East",
         "division": "Atlantic",
@@ -24,7 +24,7 @@ const teams = [
         "name": "Nets"
     },
     {
-        "teamCode": "CHA",
+        "teamCode": "CHO",
         "city": "Charlotte",
         "conference": "East",
         "division": "Southeast",
@@ -97,7 +97,7 @@ const teams = [
     },
     {
         "teamCode": "LAC",
-        "city": "LA",
+        "city": "Los Angeles",
         "conference": "West",
         "division": "Pacific",
         "fullName": "LA Clippers",

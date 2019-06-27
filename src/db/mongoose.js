@@ -57,21 +57,27 @@ dbSetUp = async (connectionURL) => {
         return console.log(e)
     }
     let data = scrapedData.filter(d => d.player)
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < data.length; i++) {
         let name = data[i].player
         console.log(name)
-        let player = new Player({
-            name
-        })
+        let player = await Player.findOne({ name })
+        if (!player) {
+            player = new Player({
+                name
+            })
+        }
         let obj = { ...data[i] }
-        console.log(obj.team_id)
-        let team = await Team.findOne({ teamCode: obj.team_id })
-        if (team) {
-            obj.team_id = team._id
-            player.seasons.push(obj)
-            player.save()
-        } else {
-            return console.log('could not find team code')
+        //TOT=Total Over Teams-- average stats of one player across multiple teams in a season
+        //might add later but not now
+        if (obj.team_id !== 'TOT') {
+            let team = await Team.findOne({ teamCode: obj.team_id })
+            if (team) {
+                obj.team = team._id
+                player.seasons.push(obj)
+                player.save()
+            } else {
+                return console.log('could not find team code')
+            }
         }
     }
     console.log('seeded players/seasons')

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const playerSeasonSchema = new mongoose.Schema({
-    team_id: {
+    team: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Team',
     },
