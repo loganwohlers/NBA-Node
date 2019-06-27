@@ -184,7 +184,7 @@ const teams = [
         "name": "76ers"
     },
     {
-        "teamCode": "PHX",
+        "teamCode": "PHO",
         "city": "Phoenix",
         "conference": "West",
         "division": "Pacific",
