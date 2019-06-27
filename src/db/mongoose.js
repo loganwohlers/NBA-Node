@@ -67,7 +67,7 @@ dbSetUp = async (connectionURL) => {
         console.log(obj.team_id)
         let team = await Team.findOne({ teamCode: obj.team_id })
         if (team) {
-            obj.teamCode = team._id
+            obj.team_id = team._id
             player.seasons.push(obj)
             player.save()
         } else {
