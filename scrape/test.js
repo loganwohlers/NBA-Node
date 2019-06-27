@@ -1,7 +1,7 @@
 const URL = 'http://localhost:3000'
 const axios = require('axios')
 
-testFn = async () => {
+playerTest = async () => {
     let results = await axios.get(URL + '/players')
     let players = results.data
     let p = players.find(n => {
@@ -9,6 +9,11 @@ testFn = async () => {
     })
     console.log(p.seasons)
 }
+gameTest = async () => {
+    let results = await axios.get(URL + '/games')
+    let games = results.data
+    console.log(games.length)
+}
 
 
-testFn()
+gameTest()
