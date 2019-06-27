@@ -19,9 +19,11 @@ seedDB = async (connectionURL) => {
     } catch (e) {
         return console.log(e)
     }
+    console.log('connected to db!!')
     const db = mongoose.connection.db
 
-    db.dropCollection('players')
+    // db.dropCollection('players')
+    // db.dropCollection('games')
 
     // db.dropCollection('seasons')
     // console.log('seeding season')
@@ -31,9 +33,9 @@ seedDB = async (connectionURL) => {
     // console.log('seeding teams')
     // await seedTeams()
 
-    console.log('seeding players')
-    await seedPlayers(2019)
-    await seedSchedule(2019)
+    // console.log('seeding players')
+    // await seedPlayers(2019)
+    // await seedSchedule(2019)
     console.log('db seeded')
 }
 
@@ -59,10 +61,10 @@ seedSchedule = async (yr) => {
         // let game = new Game(
         //     dataObj[i]
         // )
-
+        console.log(i)
         try {
             let saved = await Game.insertMany(dataObj)
-            console.log('games seeded!')
+            console.log(saved)
 
         } catch (e) {
             return console.log(e)
