@@ -56,26 +56,37 @@ getBoxScore = async (gameData) => {
     }
     const $ = cheerio.load(data)
 
-    let homeCode = teamCodeMap[gameData.home_team_name]
-    let awayCode = teamCodeMap[gameData.visitor_team_name]
-    let homeID = '#box_' + homeCode.toLowerCase() + '_basic'
-    let awayID = '#box_' + awayCode.toLowerCase() + '_basic'
+    //get table id of boxscore for each team
+    //'#box_xxx_basic'
+    let homeCode = teamCodeMap[gameData.home_team_name].toLowerCase()
+    let awayCode = teamCodeMap[gameData.visitor_team_name].toLowerCase()
 
-    const homeTable = $(homeID).children('tbody')
-    const awayTable = $(awayID).children('tbody')
-    let homeBasicBox = await scrapeBasicBox(homeTable)
-    let awayBasicBox = await scrapeBasicBox(awayTable)
-    console.log(awayBasicBox)
+    const homeBasicTable = $('#box_' + homeCode + '_basic').children('tbody')
+    const awayBasicTable = $('#box_' + awayCode + '_basic').children('tbody')
+    const homeAdvancedTable = $('#box_' + homeCode + '_advanced').children('tbody')
+    const awayAdvancedTable = $('#box_' + awayCode + '_advanced').children('tbody')
+
+    let homeBasicBox = await scrapeBox(homeBasicTable)
+    let awayBasicBox = await scrapeBox(awayBasicTable)
+    let homeAdvancedBox = await scrapeBox(homeAdvancedTable)
+    let awayAdvancedBox = await scrapeBox(awayAdvancedTable)
 
     let results = {
-        home: homeBasicBox,
-        away: awayBasicBox
+        homeBoxScores: {
+            basic: homeBasicBox,
+            advanced: homeAdvancedBox
+        },
+        awayBoxScores: {
+            basic: awayBasicBox,
+            advanced: awayAdvancedBox
+        },
     }
-    console.log(results)
+
+    return results
 }
 
-//takes in a tablebody for a basic boxscore and scrapes the data
-scrapeBasicBox = async (tableBody) => {
+//takes in a tablebody for a basic/advanced boxscore and scrapes the data
+scrapeBox = async (tableBody) => {
     let results = []
     const $ = cheerio.load(tableBody)
     tableBody.find('tr').each((index, ele) => {
