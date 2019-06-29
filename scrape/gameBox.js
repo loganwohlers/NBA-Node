@@ -39,14 +39,14 @@ gameData = async (arr) => {
                 let statVal = $(ele).text()
                 row[statName] = statVal
             })
-            //right here we get the boxscore and attach it
+            //right here we get the boxscores using the row/game as param
             results.push(row)
         }
     })
     return results
 }
 
-getBoxScore = async (gameData) => {
+getBoxScores = async (gameData) => {
     let gameURL = 'https://www.basketball-reference.com/boxscores/' + gameData.gameCode + '.html'
     console.log(gameURL)
     try {
@@ -66,10 +66,13 @@ getBoxScore = async (gameData) => {
     const homeAdvancedTable = $('#box_' + homeCode + '_advanced').children('tbody')
     const awayAdvancedTable = $('#box_' + awayCode + '_advanced').children('tbody')
 
+    //try?
     let homeBasicBox = await scrapeBox(homeBasicTable)
     let awayBasicBox = await scrapeBox(awayBasicTable)
     let homeAdvancedBox = await scrapeBox(homeAdvancedTable)
     let awayAdvancedBox = await scrapeBox(awayAdvancedTable)
+    console.log(homeBasicBox)
+    console.log(homeAdvancedBox)
 
     let results = {
         homeBoxScores: {
@@ -81,7 +84,6 @@ getBoxScore = async (gameData) => {
             advanced: awayAdvancedBox
         },
     }
-
     return results
 }
 
@@ -106,7 +108,7 @@ scrapeBox = async (tableBody) => {
     return results
 }
 
-getBoxScore(exampleData)
+getBoxScores(exampleData)
 
 
 
