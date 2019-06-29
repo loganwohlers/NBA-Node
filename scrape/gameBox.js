@@ -58,17 +58,41 @@ getBoxScore = async (gameData) => {
 
     let homeCode = teamCodeMap[gameData.home_team_name]
     let awayCode = teamCodeMap[gameData.visitor_team_name]
-
     let homeID = '#box_' + homeCode.toLowerCase() + '_basic'
     let awayID = '#box_' + awayCode.toLowerCase() + '_basic'
-    console.log(homeID)
-    console.log(awayID)
 
-    const homeBasicBox = $(homeID).children('tbody')
-    console.log(homeBasicBox.html())
-    // const awayBasicBox = $('#schedule').children('tbody')
+    const homeTable = $(homeID).children('tbody')
+    const awayTable = $(awayID).children('tbody')
+    let homeBasicBox = await scrapeBasicBox(homeTable)
+    let awayBasicBox = await scrapeBasicBox(awayTable)
+    console.log(awayBasicBox)
 
+    let results = {
+        home: homeBasicBox,
+        away: awayBasicBox
+    }
+    console.log(results)
+}
 
+//takes in a tablebody for a basic boxscore and scrapes the data
+scrapeBasicBox = async (tableBody) => {
+    let results = []
+    const $ = cheerio.load(tableBody)
+    tableBody.find('tr').each((index, ele) => {
+        let th = $(ele).find('th')
+        let name = th.text()
+        if (!name.includes('Reserves')) {
+            let row = {}
+            row.player = name
+            $(ele).find('td').each((index, ele) => {
+                let statName = $(ele).data().stat
+                let statVal = $(ele).text()
+                row[statName] = statVal
+            })
+            results.push(row)
+        }
+    })
+    return results
 }
 
 getBoxScore(exampleData)
