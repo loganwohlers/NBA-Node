@@ -1,9 +1,10 @@
 const mongoose = require('mongoose')
 
-const { Player, Team, Season, Game } = require('../models')
+const { Player, Team, Season, Game, GameBox } = require('../models')
 
 const teams = require('../../assets/teams')
 const scrapePlayerSeasons = require('../../scrape/player-season')
+const { getBoxScores } = require('../../scrape/gameBox')
 const scrapeSeason = require('../../scrape/season')
 
 //ip address instead of localhost
@@ -22,8 +23,9 @@ seedDB = async (connectionURL) => {
     console.log('connected to db!!')
     const db = mongoose.connection.db
 
-    db.dropCollection('players')
+    // db.dropCollection('players')
     db.dropCollection('games')
+    db.dropCollection('gamebox')
 
     // db.dropCollection('seasons')
     // console.log('seeding season')
@@ -33,8 +35,8 @@ seedDB = async (connectionURL) => {
     // console.log('seeding teams')
     // await seedTeams()
 
-    console.log('seeding players')
-    await seedPlayers(2019)
+    // console.log('seeding players')
+    // await seedPlayers(2019)
     console.log('seeding games')
     await seedSchedule(2019)
     console.log('db seeded')
@@ -51,10 +53,27 @@ seedSchedule = async (yr) => {
     }
 
     let dataObj = [...seasonData]
-    for (let i = 0; i < dataObj.length; i++) {
+    for (let i = 0; i < 1; i++) {
         let { home_team_name, visitor_team_name } = dataObj[i]
         let homeTeam = await Team.findOne({ fullName: home_team_name })
         let awayTeam = await Team.findOne({ fullName: visitor_team_name })
+
+        //here is where we create the gameBox
+        let box = await getBoxScores(dataObj[i])
+
+        //need to convert 
+        console.log(box.homeBoxScores.basic)
+
+        console.log(box.homeBoxScores.advanced)
+        // let gb = new GameBox({
+        //     homeBasicBox: box.homeBoxScores.basic,
+        //     homeAdvancedBox: box.homeBoxScores.advanced,
+        //     awayBasicBox: box.awayBoxScores.advanced,
+        //     awayAdvancedBox: box.awayBoxScores.advanced
+        // })
+
+        // console.log(gb)
+
         dataObj[i].home_team = homeTeam._id
         dataObj[i].away_team = awayTeam._id
         dataObj[i].season = season._id
@@ -76,6 +95,8 @@ seedTeams = async () => {
         return console.log(e)
     }
 }
+
+convertBoxtoModels = async(scrapedBoxes)
 
 seedPlayers = async (yr) => {
     //the .then here should be it's own fn-- maybe create arr of players and then do a mass insertMany?

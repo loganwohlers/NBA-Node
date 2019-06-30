@@ -30,6 +30,10 @@ const gameSchema = new mongoose.Schema({
         type: String,
         trim: true,
     },
+    box_scores: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'GameBox',
+    },
     overtimes: {
         type: String,
         trim: true,

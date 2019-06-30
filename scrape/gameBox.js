@@ -1,50 +1,41 @@
 const cheerio = require('cheerio')
 const request = require('request-promise')
 const teamCodeMap = require('../assets/teamCodeMap')
+const scrapeSeason = require('./season')
 
-const exampleData = {
-    _id: "5d16c72862c6ac637acc0bf5",
-    gameCode: "201810160BOS",
-    date: "20181016",
-    game_start_time: "8:00p",
-    visitor_pts: "87",
-    home_pts: "105",
-    overtimes: "",
-    attendance: "18,624",
-    game_remarks: "",
-    home_team_name: "Boston Celtics",
-    visitor_team_name: "Philadelphia 76ers"
-}
+// const exampleData = {
+//     _id: "5d16c72862c6ac637acc0bf5",
+//     gameCode: "201810160BOS",
+//     date: "20181016",
+//     game_start_time: "8:00p",
+//     visitor_pts: "87",
+//     home_pts: "105",
+//     overtimes: "",
+//     attendance: "18,624",
+//     game_remarks: "",
+//     home_team_name: "Boston Celtics",
+//     visitor_team_name: "Philadelphia 76ers"
+// }
 
-gameData = async (arr) => {
-    const results = []
-    let data
-    const url = 'https://www.basketball-reference.com/leagues/NBA_' + yr + '_games-' + month + '.html'
-    try {
-        data = await request(url)
-    } catch (e) {
-        return console.log(e)
-    }
-    const $ = cheerio.load(data)
-    const tableBody = $('#schedule').children('tbody')
-    tableBody.find('tr').each((index, ele) => {
-        let th = $(ele).find('th')
-        let data = $(th).attr('csk')
-        if (data) {
-            let row = {}
-            row.gameCode = data
-            row.date = data.slice(0, -4)
-            $(ele).find('td').each((index, ele) => {
-                let statName = $(ele).data().stat
-                let statVal = $(ele).text()
-                row[statName] = statVal
-            })
-            //right here we get the boxscores using the row/game as param
-            results.push(row)
-        }
-    })
-    return results
-}
+// seasonBoxScores = async (games) => {
+//     // let games
+//     // try {
+//     //     games = await scrapeSeason(2019)
+//     // } catch (e) {
+//     //     return console.log(e)
+//     // }
+//     let results = []
+//     for (let i = 0; i < 5; i++) {
+//         let currGameBox
+//         try {
+//             currGameBox = await getBoxScores(games[i])
+//         } catch (e) {
+//             return console.log(e)
+//         }
+//         results.push(currGameBox)
+//     }
+//     console.log(results[0].homeBoxScores.basic)
+// }
 
 getBoxScores = async (gameData) => {
     let gameURL = 'https://www.basketball-reference.com/boxscores/' + gameData.gameCode + '.html'
@@ -73,16 +64,11 @@ getBoxScores = async (gameData) => {
     let awayAdvancedBox = await scrapeBox(awayAdvancedTable)
 
     let results = {
-        homeBoxScores: {
-            basic: homeBasicBox,
-            advanced: homeAdvancedBox
-        },
-        awayBoxScores: {
-            basic: awayBasicBox,
-            advanced: awayAdvancedBox
-        },
+        homeBasicBox,
+        awayBasicBox,
+        homeAdvancedBox,
+        awayAdvancedBox
     }
-    console.log(results)
     return results
 }
 
@@ -107,7 +93,10 @@ scrapeBox = async (tableBody) => {
     return results
 }
 
-getBoxScores(exampleData)
+module.exports = { getBoxScores, scrapeBox }
+
+// seasonBoxScores()
+// getBoxScores(exampleData)
 
 
 
