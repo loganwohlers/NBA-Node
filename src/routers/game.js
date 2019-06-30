@@ -17,7 +17,7 @@ router.get('/games', async (req, res) => {
 router.get('/games/:id', async (req, res) => {
     const _id = req.params.id
     try {
-        const game = await Game.findById(_id).populate('home_team').populate('away_team').populate('season').populate('box_scores')
+        const game = await Game.findById(_id).populate('home_team').populate('away_team').populate('season').populate('box_scores').populate('box_scores.homeBasicBox.player', 'name')
         // .populate(
         //     {
         //         path: 'box_scores',
