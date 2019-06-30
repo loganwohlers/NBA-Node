@@ -17,7 +17,32 @@ router.get('/games', async (req, res) => {
 router.get('/games/:id', async (req, res) => {
     const _id = req.params.id
     try {
-        const game = await Game.findById(_id)
+        const game = await Game.findById(_id).populate('home_team').populate('away_team').populate('season').populate('box_scores')
+        // .populate(
+        //     {
+        //         path: 'box_scores',
+        //         populate: {
+        //             path: 'homeBasicBox',
+        //             model: 'Player'
+        //         }
+        //     })
+
+
+
+        // .populate("box_scores.homeAdvancedBox.player")
+        // .populate("box_scores.awayBasicBox.player")
+        // .populate("box_scores.awayAdvancedBox.player")
+
+        // Project.find(query)
+        //     .populate({
+        //         path: 'pages',
+        //         populate: {
+        //             path: 'components',
+        //             model: 'Component'
+        //         }
+        //     })
+
+
         if (!game) {
             return res.status(404).send()
         }
