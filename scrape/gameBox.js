@@ -71,8 +71,6 @@ getBoxScores = async (gameData) => {
     let awayBasicBox = await scrapeBox(awayBasicTable)
     let homeAdvancedBox = await scrapeBox(homeAdvancedTable)
     let awayAdvancedBox = await scrapeBox(awayAdvancedTable)
-    console.log(homeBasicBox)
-    console.log(homeAdvancedBox)
 
     let results = {
         homeBoxScores: {
@@ -84,6 +82,7 @@ getBoxScores = async (gameData) => {
             advanced: awayAdvancedBox
         },
     }
+    console.log(results)
     return results
 }
 

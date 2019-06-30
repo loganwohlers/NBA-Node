@@ -159,44 +159,14 @@ const advancedBoxScehma = new mongoose.Schema({
     }
 })
 
-module.exports = { basicBoxScehma, advancedBoxScehma }
+const allBoxSchmea = new mongoose.Schema({
+    homeBasicBox: [basicBoxScehma],
+    homeAdvancedBox: [advancedBoxScehma],
+    awayBasicBox: [basicBoxScehma],
+    awayAdvancedBox: [advancedBoxScehma],
+})
 
-// let advanced = {
-//     player: 'Terry Rozier',
-//     mp: '26:31',
-//     ts_pct: '.550',
-//     efg_pct: '.550',
-//     fg3a_per_fga_pct: '.200',
-//     fta_per_fga_pct: '.000',
-//     orb_pct: '0.0',
-//     drb_pct: '29.6',
-//     trb_pct: '14.2',
-//     ast_pct: '5.5',
-//     stl_pct: '0.0',
-//     blk_pct: '3.0',
-//     tov_pct: '9.1',
-//     usg_pct: '17.0',
-//     off_rtg: '102',
-//     def_rtg: '84'
-// }
 
-// mp: '29:57',
-//     fg: '4',
-//         fga: '7',
-//             fg_pct: '.571',
-//                 fg3: '0',
-//                     fg3a: '1',
-//                         fg3_pct: '.000',
-//                             ft: '1',
-//                                 fta: '1',
-//                                     ft_pct: '1.000',
-//                                         orb: '0',
-//                                             drb: '4',
-//                                                 trb: '4',
-//                                                     ast: '2',
-//                                                         stl: '0',
-//                                                             blk: '4',
-//                                                                 tov: '3',
-//                                                                     pf: '1',
-//                                                                         pts: '9',
-//                                                                             plus_minus: '+9'
+const GameBox = mongoose.model('GameBox', allBoxSchmea)
+
+module.exports = { basicBoxScehma, advancedBoxScehma, GameBox }
