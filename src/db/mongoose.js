@@ -60,12 +60,13 @@ seedSchedule = async (yr) => {
 
         //here is where we create the gameBox
         let box = await getBoxScores(dataObj[i])
+        console.log(box)
 
         //need to convert 
         let newBox = await convertBoxRefs(box)
-        console.log(newBox)
+        let gameBox = new GameBox(newBox)
 
-
+        console.log(gameBox)
 
         dataObj[i].home_team = homeTeam._id
         dataObj[i].away_team = awayTeam._id
@@ -83,36 +84,26 @@ seedSchedule = async (yr) => {
 
 //replacing all player names in each w/ a reference to the actual player model
 convertBoxRefs = async ({ homeBasicBox, homeAdvancedBox, awayBasicBox, awayAdvancedBox }) => {
-    homeBasicBox = homeBasicBox.map(async (pl) => {
-        let playerID = await convertPlayerToID(pl.player)
-        return { ...pl, player: playerID }
-    })
-    awayBasicBox = awayBasicBox.map(async (pl) => {
-        let playerID = await convertPlayerToID(pl.player)
-        return { ...pl, player: playerID }
-    })
-    homeAdvancedBox = homeAdvancedBox.map(async (pl) => {
-        let playerID = await convertPlayerToID(pl.player)
-        return { ...pl, player: playerID }
-    })
-    awayAdvancedBox = awayAdvancedBox.map(async (pl) => {
-        let playerID = await convertPlayerToID(pl.player)
-        return { ...pl, player: playerID }
-    })
-
+    homeBasicBox = await convertSingleBox(homeBasicBox)
+    homeAdvancedBox = await convertSingleBox(homeBasicBox)
+    awayBasicBox = await convertSingleBox(homeBasicBox)
+    awayAdvancedBox = await convertSingleBox(homeBasicBox)
+    console.log(homeBasicBox)
     return {
         homeBasicBox,
-        awayBasicBox,
         homeAdvancedBox,
+        awayBasicBox,
         awayAdvancedBox
     }
-    // let aPromise.all(homeBasicBox).then(data => console.log(data[0]))
 }
 
-// let doublePrices = Object.fromEntries(
-//     // convert to array, map, and then fromEntries gives back the object
-//     Object.entries(prices).map(([key, value]) => [key, value * 2])
-// );
+convertSingleBox = async (box) => {
+    let newBox = box.map(async (pl) => {
+        let playerID = await convertPlayerToID(pl.player)
+        return { ...pl, player: playerID }
+    })
+    return Promise.all(newBox)
+}
 
 convertPlayerToID = async (name) => {
     let player = await Player.findOne({ name })
