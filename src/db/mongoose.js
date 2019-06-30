@@ -59,9 +59,8 @@ seedSchedule = async (yr) => {
         let awayTeam = await Team.findOne({ fullName: visitor_team_name })
 
         //here is where we create the gameBox
+        console.log(dataObj[i])
         let box = await getBoxScores(dataObj[i])
-        console.log(box)
-
         //need to convert 
         let newBox = await convertBoxRefs(box)
         let gameBox = new GameBox(newBox)
@@ -85,10 +84,9 @@ seedSchedule = async (yr) => {
 //replacing all player names in each w/ a reference to the actual player model
 convertBoxRefs = async ({ homeBasicBox, homeAdvancedBox, awayBasicBox, awayAdvancedBox }) => {
     homeBasicBox = await convertSingleBox(homeBasicBox)
-    homeAdvancedBox = await convertSingleBox(homeBasicBox)
-    awayBasicBox = await convertSingleBox(homeBasicBox)
-    awayAdvancedBox = await convertSingleBox(homeBasicBox)
-    console.log(homeBasicBox)
+    homeAdvancedBox = await convertSingleBox(homeAdvancedBox)
+    awayBasicBox = await convertSingleBox(awayBasicBox)
+    awayAdvancedBox = await convertSingleBox(awayAdvancedBox)
     return {
         homeBasicBox,
         homeAdvancedBox,

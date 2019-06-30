@@ -69,6 +69,7 @@ getBoxScores = async (gameData) => {
         homeAdvancedBox,
         awayAdvancedBox
     }
+
     return results
 }
 

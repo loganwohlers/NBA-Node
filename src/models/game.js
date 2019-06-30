@@ -50,8 +50,6 @@ const gameSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Season',
     },
-
-
 })
 
 const Game = mongoose.model('Game', gameSchema)
