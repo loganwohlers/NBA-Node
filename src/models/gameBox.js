@@ -86,8 +86,9 @@ const basicBoxScehma = new mongoose.Schema({
         type: String,
         trim: true,
     },
-    dnp: {
-        type: Boolean
+    reason: {
+        type: String,
+        default: ''
     }
 })
 

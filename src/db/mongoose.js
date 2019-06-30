@@ -62,17 +62,10 @@ seedSchedule = async (yr) => {
         let box = await getBoxScores(dataObj[i])
 
         //need to convert 
-        console.log(box.homeBoxScores.basic)
+        let newBox = await convertBoxRefs(box)
+        console.log(newBox)
 
-        console.log(box.homeBoxScores.advanced)
-        // let gb = new GameBox({
-        //     homeBasicBox: box.homeBoxScores.basic,
-        //     homeAdvancedBox: box.homeBoxScores.advanced,
-        //     awayBasicBox: box.awayBoxScores.advanced,
-        //     awayAdvancedBox: box.awayBoxScores.advanced
-        // })
 
-        // console.log(gb)
 
         dataObj[i].home_team = homeTeam._id
         dataObj[i].away_team = awayTeam._id
@@ -84,7 +77,51 @@ seedSchedule = async (yr) => {
     } catch (e) {
         return console.log(e)
     }
+}
 
+// Promise.all(results).then((completed) => document.writeln(`\nResult: ${completed}`));
+
+//replacing all player names in each w/ a reference to the actual player model
+convertBoxRefs = async ({ homeBasicBox, homeAdvancedBox, awayBasicBox, awayAdvancedBox }) => {
+    homeBasicBox = homeBasicBox.map(async (pl) => {
+        let playerID = await convertPlayerToID(pl.player)
+        return { ...pl, player: playerID }
+    })
+    awayBasicBox = awayBasicBox.map(async (pl) => {
+        let playerID = await convertPlayerToID(pl.player)
+        return { ...pl, player: playerID }
+    })
+    homeAdvancedBox = homeAdvancedBox.map(async (pl) => {
+        let playerID = await convertPlayerToID(pl.player)
+        return { ...pl, player: playerID }
+    })
+    awayAdvancedBox = awayAdvancedBox.map(async (pl) => {
+        let playerID = await convertPlayerToID(pl.player)
+        return { ...pl, player: playerID }
+    })
+
+    return {
+        homeBasicBox,
+        awayBasicBox,
+        homeAdvancedBox,
+        awayAdvancedBox
+    }
+    // let aPromise.all(homeBasicBox).then(data => console.log(data[0]))
+}
+
+// let doublePrices = Object.fromEntries(
+//     // convert to array, map, and then fromEntries gives back the object
+//     Object.entries(prices).map(([key, value]) => [key, value * 2])
+// );
+
+convertPlayerToID = async (name) => {
+    let player = await Player.findOne({ name })
+    if (player) {
+        return player._id
+    } else {
+        let newPlayer = new Player(name)
+        return newPlayer._id
+    }
 }
 
 seedTeams = async () => {
@@ -95,8 +132,6 @@ seedTeams = async () => {
         return console.log(e)
     }
 }
-
-convertBoxtoModels = async(scrapedBoxes)
 
 seedPlayers = async (yr) => {
     //the .then here should be it's own fn-- maybe create arr of players and then do a mass insertMany?
