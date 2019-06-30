@@ -17,32 +17,43 @@ router.get('/games', async (req, res) => {
 router.get('/games/:id', async (req, res) => {
     const _id = req.params.id
     try {
-        const game = await Game.findById(_id).populate('home_team').populate('away_team').populate('season').populate('box_scores').populate('box_scores.homeBasicBox.player', 'name')
-        // .populate(
-        //     {
-        //         path: 'box_scores',
-        //         populate: {
-        //             path: 'homeBasicBox',
-        //             model: 'Player'
-        //         }
-        //     })
-
-
-
-        // .populate("box_scores.homeAdvancedBox.player")
-        // .populate("box_scores.awayBasicBox.player")
-        // .populate("box_scores.awayAdvancedBox.player")
-
-        // Project.find(query)
-        //     .populate({
-        //         path: 'pages',
-        //         populate: {
-        //             path: 'components',
-        //             model: 'Component'
-        //         }
-        //     })
-
-
+        const game = await Game.findById(_id).populate('home_team').populate('away_team').populate('season')
+            .populate(
+                {
+                    path: 'box_scores',
+                    populate: {
+                        path: 'homeBasicBox.player',
+                        model: 'Player',
+                        select: 'name'
+                    }
+                })
+            .populate(
+                {
+                    path: 'box_scores',
+                    populate: {
+                        path: 'homeAdvanced.player',
+                        model: 'Player',
+                        select: 'name'
+                    }
+                })
+            .populate(
+                {
+                    path: 'box_scores',
+                    populate: {
+                        path: 'awayBasicBox.player',
+                        model: 'Player',
+                        select: 'name'
+                    }
+                })
+            .populate(
+                {
+                    path: 'box_scores',
+                    populate: {
+                        path: 'awayAdvancedBox.player',
+                        model: 'Player',
+                        select: 'name'
+                    }
+                })
         if (!game) {
             return res.status(404).send()
         }
