@@ -64,13 +64,13 @@ seedSchedule = async (yr) => {
         //need to convert 
         let newBox = await convertBoxRefs(box)
         let gameBox = new GameBox(newBox)
-
-        console.log(gameBox)
+        gameBox.save()
 
         dataObj[i].home_team = homeTeam._id
         dataObj[i].away_team = awayTeam._id
         dataObj[i].season = season._id
-        console.log(i)
+        dataObj[i].box_scores = gameBox._id
+        console.log(dataObj[i])
     }
     try {
         let saved = await Game.insertMany(dataObj)
