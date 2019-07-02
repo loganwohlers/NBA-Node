@@ -16,4 +16,6 @@ gameTest = async () => {
 }
 
 
+
+playerTest()
 gameTest()

@@ -53,7 +53,7 @@ seedSchedule = async (yr) => {
     }
 
     let dataObj = [...seasonData]
-    for (let i = 0; i < dataObj.length; i++) {
+    for (let i = 0; i < 50; i++) {
         let { home_team_name, visitor_team_name } = dataObj[i]
         let homeTeam = await Team.findOne({ fullName: home_team_name })
         let awayTeam = await Team.findOne({ fullName: visitor_team_name })
