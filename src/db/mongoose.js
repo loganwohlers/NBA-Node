@@ -53,15 +53,13 @@ seedSchedule = async (yr) => {
     }
 
     let dataObj = [...seasonData]
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < dataObj.length; i++) {
         let { home_team_name, visitor_team_name } = dataObj[i]
         let homeTeam = await Team.findOne({ fullName: home_team_name })
         let awayTeam = await Team.findOne({ fullName: visitor_team_name })
 
-        //here is where we create the gameBox
-        console.log(dataObj[i])
         let box = await getBoxScores(dataObj[i])
-        //need to convert 
+        // console.log(box)
         let newBox = await convertBoxRefs(box)
         let gameBox = new GameBox(newBox)
         gameBox.save()
@@ -70,7 +68,7 @@ seedSchedule = async (yr) => {
         dataObj[i].away_team = awayTeam._id
         dataObj[i].season = season._id
         dataObj[i].box_scores = gameBox._id
-        console.log(dataObj[i])
+        console.log(i)
     }
     try {
         let saved = await Game.insertMany(dataObj)
@@ -78,8 +76,6 @@ seedSchedule = async (yr) => {
         return console.log(e)
     }
 }
-
-// Promise.all(results).then((completed) => document.writeln(`\nResult: ${completed}`));
 
 //replacing all player names in each w/ a reference to the actual player model
 convertBoxRefs = async ({ homeBasicBox, homeAdvancedBox, awayBasicBox, awayAdvancedBox }) => {
@@ -108,7 +104,8 @@ convertPlayerToID = async (name) => {
     if (player) {
         return player._id
     } else {
-        let newPlayer = new Player(name)
+        let newPlayer = new Player({ name })
+        newPlayer.save()
         return newPlayer._id
     }
 }
