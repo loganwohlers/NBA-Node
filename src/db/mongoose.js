@@ -77,9 +77,9 @@ seedSchedule = async (season) => {
         console.log(i)
     }
     try {
-        let saved = await Game.insertMany(dataObj)
-        console.log(saved.length)
-        console.log('TEST!')
+        let sample = dataObj.slice(0, 50)
+        let saved = await Game.insertMany(sample)
+        console.log('seeded games/boxscores!')
     } catch (e) {
         return console.log(e)
     }
