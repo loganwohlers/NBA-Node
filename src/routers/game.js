@@ -7,6 +7,7 @@ const router = new express.Router()
 router.get('/games', async (req, res) => {
     try {
         const games = await Game.find({}).populate('home_team').populate('away_team').populate('season')
+        // .limit(50)
         res.send(games)
     } catch (e) {
         res.status(400).send('service down')

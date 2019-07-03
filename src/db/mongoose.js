@@ -53,7 +53,7 @@ seedSchedule = async (yr) => {
     }
 
     let dataObj = [...seasonData]
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < dataObj.length; i++) {
         let { home_team_name, visitor_team_name } = dataObj[i]
         let homeTeam = await Team.findOne({ fullName: home_team_name })
         let awayTeam = await Team.findOne({ fullName: visitor_team_name })
@@ -72,6 +72,7 @@ seedSchedule = async (yr) => {
     }
     try {
         let saved = await Game.insertMany(dataObj)
+        console.log('TEST!')
     } catch (e) {
         return console.log(e)
     }
@@ -171,8 +172,5 @@ seedSeason = async () => {
         return console.log(e)
     }
 }
-
-// seedRandom(URL)
-// seedTeams(URL)
 
 seedDB(URL)

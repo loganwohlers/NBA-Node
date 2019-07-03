@@ -17,5 +17,5 @@ gameTest = async () => {
 
 
 
-playerTest()
+// playerTest()
 gameTest()
