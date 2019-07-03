@@ -1,7 +1,7 @@
 const cheerio = require('cheerio')
 const request = require('request-promise')
 
-//async fn  returns promise
+
 scrapePlayerSeasons = async (yr) => {
     const result = []
     const url = 'https://www.basketball-reference.com/leagues/NBA_' + yr + '_per_game.html'
@@ -26,11 +26,6 @@ scrapePlayerSeasons = async (yr) => {
 }
 
 module.exports = scrapePlayerSeasons
-
-// readScrape = async () => {
-//     const data = await scrapePlayerSeasons(2019)
-//     return data
-// }
 
 
 
