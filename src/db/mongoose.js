@@ -23,43 +23,49 @@ seedDB = async (connectionURL) => {
     console.log('connected to db!!')
     const db = mongoose.connection.db
 
-    // db.dropCollection('players')
+    //mass destoying all docs while seeds are tested
+    db.dropCollection('players')
     db.dropCollection('games')
     db.dropCollection('gamebox')
-
-    // db.dropCollection('seasons')
-    // console.log('seeding season')
-    // await seedSeason()
+    db.dropCollection('seasons')
 
     // db.dropCollection('teams')
-    // console.log('seeding teams')
     // await seedTeams()
 
-    // console.log('seeding players')
-    // await seedPlayers(2019)
-    console.log('seeding games')
-    await seedSchedule(2019)
+    await seedSeasonData(2019)
     console.log('db seeded')
 }
 
-seedSchedule = async (yr) => {
-    let seasonData
+seedSeasonData = async (year) => {
     let season
+    let description = (year - 1) + '-' + year + ' NBA Season'
     try {
-        seasonData = await scrapeSeason(2019)
-        season = await Season.findOne({ year: yr })
+        season = new Season({ year, description })
+        season.save()
+    } catch (e) {
+        return console.log(e)
+    }
+    await seedPlayers(season)
+    await seedSchedule(season)
+}
+
+seedSchedule = async (season) => {
+    let seasonData
+    console.log('seeding games')
+    try {
+        seasonData = await scrapeSeason(season.year)
     } catch (e) {
         return console.log(e)
     }
 
     let dataObj = [...seasonData]
-    for (let i = 0; i < dataObj.length; i++) {
+    //for testing just seeding first 50 games
+    for (let i = 0; i < 50; i++) {
         let { home_team_name, visitor_team_name } = dataObj[i]
         let homeTeam = await Team.findOne({ fullName: home_team_name })
         let awayTeam = await Team.findOne({ fullName: visitor_team_name })
 
         let box = await getBoxScores(dataObj[i])
-        // console.log(box)
         let newBox = await convertBoxRefs(box)
         let gameBox = new GameBox(newBox)
         gameBox.save()
@@ -72,6 +78,7 @@ seedSchedule = async (yr) => {
     }
     try {
         let saved = await Game.insertMany(dataObj)
+        console.log(saved.length)
         console.log('TEST!')
     } catch (e) {
         return console.log(e)
@@ -92,6 +99,7 @@ convertBoxRefs = async ({ homeBasicBox, homeAdvancedBox, awayBasicBox, awayAdvan
     }
 }
 
+//takes an array of a boxscore and returns a new array w/ all player names replaced by their actual document id that was seeded earlier
 convertSingleBox = async (box) => {
     let newBox = box.map(async (pl) => {
         let playerID = await convertPlayerToID(pl.player)
@@ -100,6 +108,7 @@ convertSingleBox = async (box) => {
     return Promise.all(newBox)
 }
 
+//takes a player name and returns their document id-- if there is no document then one is created-- this happens when a player appears in a boxscore but not on the end of season stats list
 convertPlayerToID = async (name) => {
     let player = await Player.findOne({ name })
     if (player) {
@@ -111,6 +120,7 @@ convertPlayerToID = async (name) => {
     }
 }
 
+//uses the hardcoded info on all 30 teams and turns them into Team documents
 seedTeams = async () => {
     try {
         await Team.insertMany(teams)
@@ -120,14 +130,13 @@ seedTeams = async () => {
     }
 }
 
-seedPlayers = async (yr) => {
-    //the .then here should be it's own fn-- maybe create arr of players and then do a mass insertMany?
-    //need to stop dupe players-- want them to just update their seasons
+//season doc should just be passed in
+seedPlayers = async (season) => {
     let scrapedData
-    let season
+    console.log('seeding players')
     try {
-        scrapedData = await scrapePlayerSeasons(yr)
-        season = await Season.findOne({ year: yr })
+        scrapedData = await scrapePlayerSeasons(season.year)
+        console.log('player data scraped')
     } catch (e) {
         return console.log(e)
     }
@@ -140,16 +149,15 @@ seedPlayers = async (yr) => {
         //works as expected*****fix
         let players = await Player.findOne({})
 
+        //checking for if this player document exists- if not create new player 
         let player = await Player.findOne({ name })
-        //checking for if this player exists
         if (!player) {
             player = new Player({
                 name
             })
         }
+        // creating the object that represents a played season and adding it to players seasons array
         let obj = { ...data[i] }
-        //TOT=Total Over Teams-- average stats of one player across multiple teams in a season
-        //might add later but not now
         if (obj.team_id !== 'TOT') {
             let team = await Team.findOne({ teamCode: obj.team_id })
             if (team) {
@@ -162,15 +170,9 @@ seedPlayers = async (yr) => {
             }
         }
     }
+    console.log('players seeded')
 }
 
-seedSeason = async () => {
-    try {
-        let season = new Season({ year: 2019, description: '2018-2019 NBA Season' })
-        return season.save()
-    } catch (e) {
-        return console.log(e)
-    }
-}
+
 
 seedDB(URL)
