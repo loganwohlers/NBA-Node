@@ -22,9 +22,11 @@ scrapePlayerSeasons = async (yr) => {
         })
         result.push(row)
     })
+    // console.log(result)
     return result
 }
 
+// scrapePlayerSeasons(2019)
 module.exports = scrapePlayerSeasons
 
 

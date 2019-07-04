@@ -69,7 +69,6 @@ getBoxScores = async (gameData) => {
         homeAdvancedBox,
         awayAdvancedBox
     }
-
     return results
 }
 
@@ -96,8 +95,7 @@ scrapeBox = async (tableBody) => {
 
 module.exports = { getBoxScores, scrapeBox }
 
-// seasonBoxScores()
-// getBoxScores(exampleData)
+
 
 
 
