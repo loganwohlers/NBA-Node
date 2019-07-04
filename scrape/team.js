@@ -2,7 +2,7 @@ const cheerio = require('cheerio')
 const request = require('request-promise')
 const teams = require('../assets/teams')
 const { Team } = require('../src/models/team')
-
+//test
 // scrapeTeamSeasons = async (yr) => {
 //     const result = []
 //     const url = 'https://www.basketball-reference.com/teams/' + code + '/' + yr + '.html'
