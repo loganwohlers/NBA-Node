@@ -17,6 +17,7 @@
     "mongodb": "^3.2.7",
     "mongoose": "^5.6.1",
     "nodemon": "^1.19.1",
+    "puppeteer": "^1.18.1",
     "puppeteer-core": "^1.18.1",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
