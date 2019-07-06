@@ -1,19 +1,20 @@
 const cheerio = require('cheerio')
 const request = require('request-promise')
 const teams = require('../assets/teams')
-const puppeteer = require('puppeteer-core')
+const puppeteer = require('puppeteer')
 
 scrapeTeamData = async () => {
-    let browser = await puppeteer.launch({ headless: false }); //headless:false so we can watch the browser as it works 
-    const testUrl = 'https://www.basketball-reference.com/teams/MIL/2019.html'
+    console.log('puppeteer')
+    const browser = await puppeteer.launch();
+    const testUrl = 'https://www.basketball-reference.com/leagues/NBA_2019.html'
     let page = await browser.newPage();
     await page.goto(testUrl);
 
     let details = await page.evaluate(() => {
         //Extract each episode's basic details
-        let table = document.querySelector(".'#team-stats-per_game'");
-        let data = Array.from(table.children);
-        console.log(data)
+        let table = document.querySelector("#team-stats-per_game");
+        // let data = Array.from(table.children);
+        console.log(table)
 
         // Loop through each episode and get their details 
         // let episodes_info = episode_panels.map(episode_panel => {
@@ -31,7 +32,6 @@ scrapeTeamData = async () => {
 scrapeTeamSeasons = async (year) => {
     const results = []
     const url = 'https://www.basketball-reference.com/leagues/NBA_' + year + '.html'
-    // const testUrl = 'https://www.basketball-reference.com/teams/MIL/2019.html'
     let data
     try {
         data = await request(url)
