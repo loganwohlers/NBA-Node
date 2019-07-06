@@ -11,27 +11,22 @@ scrapeTeamData = async () => {
     await page.goto(testUrl);
     const data = await page.evaluate(() => {
         let results = []
-        let tableRows = document.querySelectorAll("#team-stats-per_game tr");
-        for (let i = 0; i < 5; i++) {
+        let tableRows = document.querySelectorAll("#team-stats-per_game tbody tr");
+        for (let i = 0; i < 3; i++) {
             let row = {}
             let values = tableRows[i].querySelectorAll('td')
-            for (let i = 0; i < values.length; i++) {
-                results.push(values[i].innerText)
+            if (values) {
+                for (let i = 0; i < values.length; i++) {
+                    let statName = values[i].dataset.stat
+                    let statVal = values[i].innerText
+                    row[statName] = statVal
+                }
+                results.push(row)
             }
         }
         return results
     })
     console.log(data)
-    // Loop through each episode and get their details 
-    // let episodes_info = episode_panels.map(episode_panel => {
-    //     let title = episode_panel.querySelector(".listen-now").textContent;
-    //     let datetime = episode_panel.querySelector(".datetime").textContent;
-    //     let episode_download_page = episode_panel
-    //         .querySelector(".download")
-    //         .getAttribute("href");
-    //     return { title, datetime, episode_download_page };
-    // });
-    // return episodes_info;
     console.log('closing!')
     await browser.close()
 }
@@ -52,7 +47,7 @@ scrapeTeamSeasons = async (year) => {
         console.log('test')
         let row = {}
         $(ele).find('td').each((index, ele) => {
-            let statName = $(ele).data().stat
+            let statName = $(ele).data.stat
             let statVal = $(ele).text()
             row[statName] = statVal
         })
