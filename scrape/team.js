@@ -10,9 +10,16 @@ scrapeTeamData = async () => {
     let page = await browser.newPage();
     await page.goto(testUrl);
     const data = await page.evaluate(() => {
-        let table = document.querySelector("#team-stats-per_game");
-        // let data = Array.from(table.children);
-        return table.innerHTML
+        let results = []
+        let tableRows = document.querySelectorAll("#team-stats-per_game tr");
+        for (let i = 0; i < 5; i++) {
+            let row = {}
+            let values = tableRows[i].querySelectorAll('td')
+            for (let i = 0; i < values.length; i++) {
+                results.push(values[i].innerText)
+            }
+        }
+        return results
     })
     console.log(data)
     // Loop through each episode and get their details 
