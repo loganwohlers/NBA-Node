@@ -4,29 +4,29 @@ const teams = require('../assets/teams')
 const puppeteer = require('puppeteer')
 
 scrapeTeamData = async () => {
-    console.log('puppeteer')
+    console.log('starting puppeteer')
     const browser = await puppeteer.launch();
     const testUrl = 'https://www.basketball-reference.com/leagues/NBA_2019.html'
     let page = await browser.newPage();
     await page.goto(testUrl);
-
-    let details = await page.evaluate(() => {
-        //Extract each episode's basic details
+    const data = await page.evaluate(() => {
         let table = document.querySelector("#team-stats-per_game");
         // let data = Array.from(table.children);
-        console.log(table)
-
-        // Loop through each episode and get their details 
-        // let episodes_info = episode_panels.map(episode_panel => {
-        //     let title = episode_panel.querySelector(".listen-now").textContent;
-        //     let datetime = episode_panel.querySelector(".datetime").textContent;
-        //     let episode_download_page = episode_panel
-        //         .querySelector(".download")
-        //         .getAttribute("href");
-        //     return { title, datetime, episode_download_page };
-        // });
-        // return episodes_info;
-    });
+        return table.innerHTML
+    })
+    console.log(data)
+    // Loop through each episode and get their details 
+    // let episodes_info = episode_panels.map(episode_panel => {
+    //     let title = episode_panel.querySelector(".listen-now").textContent;
+    //     let datetime = episode_panel.querySelector(".datetime").textContent;
+    //     let episode_download_page = episode_panel
+    //         .querySelector(".download")
+    //         .getAttribute("href");
+    //     return { title, datetime, episode_download_page };
+    // });
+    // return episodes_info;
+    console.log('closing!')
+    await browser.close()
 }
 
 scrapeTeamSeasons = async (year) => {
