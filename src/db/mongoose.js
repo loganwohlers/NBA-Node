@@ -29,8 +29,8 @@ seedDB = async (connectionURL) => {
     db.dropCollection('gamebox')
     db.dropCollection('seasons')
 
-    // db.dropCollection('teams')
-    // await seedTeams()
+    db.dropCollection('teams')
+    await seedTeams()
 
     await seedSeasonData(2019)
     console.log('db seeded')
@@ -72,6 +72,7 @@ seedTeamSeasons = async (season) => {
     let data = scrapedData.filter(d => d.team_name)
     for (let i = 0; i < 3; i++) {
         let currTeamData = { ...data[i] }
+        console.log(currTeamData)
         let fullName = currTeamData.team_name
         let playoffs = false
 

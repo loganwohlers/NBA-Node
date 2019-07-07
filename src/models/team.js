@@ -9,11 +9,11 @@ const statsSchema = new mongoose.Schema({
         type: String,
         default: 0
     },
-    fg_per_g: {
+    fg: {
         type: String,
         default: 0
     },
-    fga_per_g: {
+    fga: {
         type: String,
         default: 0
     },
@@ -21,11 +21,11 @@ const statsSchema = new mongoose.Schema({
         type: String,
         default: 0
     },
-    fg2_per_g: {
+    fg2: {
         type: String,
         default: 0
     },
-    fg2a_per_g: {
+    fg2a: {
         type: String,
         default: 0
     },
@@ -34,11 +34,11 @@ const statsSchema = new mongoose.Schema({
         default: 0
     },
 
-    fg3_per_g: {
+    fg3: {
         type: String,
         default: 0
     },
-    fg3a_per_g: {
+    fg3a: {
         type: String,
         default: 0
     },
@@ -46,11 +46,11 @@ const statsSchema = new mongoose.Schema({
         type: String,
         default: 0
     },
-    ft_per_g: {
+    ft: {
         type: String,
         default: 0
     },
-    fta_per_g: {
+    fta: {
         type: String,
         default: 0
     },
@@ -58,35 +58,35 @@ const statsSchema = new mongoose.Schema({
         type: String,
         default: 0
     },
-    orb_per_g: {
+    orb: {
         type: String,
         default: 0
     },
-    drb_per_g: {
+    drb: {
         type: String,
         default: 0
     },
-    trb_per_g: {
+    trb: {
         type: String,
         default: 0
     },
-    ast_per_g: {
+    ast: {
         type: String,
         default: 0
     },
-    stl_per_g: {
+    stl: {
         type: String,
         default: 0
     },
-    blk_per_g: {
+    blk: {
         type: String,
         default: 0
     },
-    tov_per_g: {
+    tov: {
         type: String,
         default: 0
     },
-    pf_per_g: {
+    pf: {
         type: String,
         default: 0
     },
@@ -94,7 +94,7 @@ const statsSchema = new mongoose.Schema({
         type: Boolean,
         default: null
     },
-    pts_per_g: {
+    pts: {
         type: String,
         default: 0
     }
