@@ -70,9 +70,8 @@ seedTeamSeasons = async (season) => {
         return console.log(e)
     }
     let data = scrapedData.filter(d => d.team_name)
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < data.length; i++) {
         let currTeamData = { ...data[i] }
-        console.log(currTeamData)
         let fullName = currTeamData.team_name
         let playoffs = false
 
@@ -84,12 +83,11 @@ seedTeamSeasons = async (season) => {
         }
         let team = await Team.findOne({ fullName })
 
-        currTeamData['madePlayoffs'] = playoffs
         let teamSeason = { season: season.id }
         teamSeason['teamStats'] = currTeamData
+        teamSeason['madePlayoffs'] = playoffs
         team.seasons.push(teamSeason)
         team.save()
-        console.log(team)
     }
 
 }

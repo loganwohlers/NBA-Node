@@ -90,10 +90,6 @@ const statsSchema = new mongoose.Schema({
         type: String,
         default: 0
     },
-    madePlayoffs: {
-        type: Boolean,
-        default: null
-    },
     pts: {
         type: String,
         default: 0
@@ -104,6 +100,10 @@ const teamSeasonSchema = new mongoose.Schema({
     season: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Season',
+    },
+    madePlayoffs: {
+        type: Boolean,
+        default: null
     },
     teamStats: statsSchema,
     // opponentStats: statsSchema
