@@ -71,20 +71,19 @@ seedTeamSeasons = async (season) => {
     }
 
     for (let i = 0; i < scrapedData.length; i++) {
-        let currTeamData = { ...scrapedData[i] }
-        let fullName = currTeamData.team_name
+        let { team_name, team_stats, opp_stats } = { ...scrapedData[i] }
         let playoffs = false
 
         //playoff teams are denoted w/ an * as last char
-        if (fullName.includes('*')) {
+        if (team_name.includes('*')) {
             playoffs = true
-            fullName = fullName.slice(0, fullName.length - 1)
+            team_name = team_name.slice(0, team_name.length - 1)
         }
-
-        let team = await Team.findOne({ fullName })
+        let team = await Team.findOne({ fullName: team_name })
 
         let teamSeason = { season: season.id }
-        teamSeason['teamStats'] = currTeamData
+        teamSeason['teamPerGameStats'] = team_stats
+        teamSeason['opponentPerGameStats'] = opp_stats
         teamSeason['madePlayoffs'] = playoffs
         team.seasons.push(teamSeason)
         team.save()

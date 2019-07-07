@@ -105,8 +105,8 @@ const teamSeasonSchema = new mongoose.Schema({
         type: Boolean,
         default: null
     },
-    teamStats: statsSchema,
-    // opponentStats: statsSchema
+    teamPerGameStats: statsSchema,
+    opponentPerGameStats: statsSchema
 
 })
 

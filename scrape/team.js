@@ -16,7 +16,6 @@ mapHomeAwayData = ({ team, opp }) => {
         }
         final.push(results)
     }
-    console.log(final[0])
     return final
 }
 
@@ -55,7 +54,7 @@ scrapeTeamData = async (year) => {
         }
         return results
     })
-    console.log('closing!')
+    console.log('closing browser!')
 
     let finalData = mapHomeAwayData(data)
     await browser.close()
