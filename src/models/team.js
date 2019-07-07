@@ -90,6 +90,10 @@ const statsSchema = new mongoose.Schema({
         type: String,
         default: 0
     },
+    madePlayoffs: {
+        type: Boolean,
+        default: null
+    },
     pts_per_g: {
         type: String,
         default: 0
@@ -102,7 +106,7 @@ const teamSeasonSchema = new mongoose.Schema({
         ref: 'Season',
     },
     teamStats: statsSchema,
-    opponentStats: statsSchema
+    // opponentStats: statsSchema
 
 })
 

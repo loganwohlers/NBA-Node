@@ -47,7 +47,7 @@ seedSeasonData = async (year) => {
     }
     await seedTeamSeasons(season)
     await seedPlayers(season)
-    await seedSchedule(season)
+    // await seedSchedule(season)
 }
 
 //uses the hardcoded info on all 30 teams and turns them into Team documents
@@ -69,10 +69,31 @@ seedTeamSeasons = async (season) => {
     } catch (e) {
         return console.log(e)
     }
+    let data = scrapedData.filter(d => d.team_name)
+    for (let i = 0; i < 3; i++) {
+        let currTeamData = { ...data[i] }
+        let fullName = currTeamData.team_name
+        let playoffs = false
 
-    console.log(scrapedData)
+        //playoff teams are denoted w/ an * as last char
+        if (fullName.includes('*')) {
+            playoffs = true
+            fullName = fullName.slice(0, fullName.length - 1)
+            console.log(fullName)
+        }
+        let team = await Team.findOne({ fullName })
+
+        currTeamData['madePlayoffs'] = playoffs
+        let teamSeason = { season: season.id }
+        teamSeason['teamStats'] = currTeamData
+        team.seasons.push(teamSeason)
+        team.save()
+        console.log(team)
+    }
+
 }
 
+//still need to look into/fix the player.findOne({}) code below
 seedPlayers = async (season) => {
     let scrapedData
     console.log('seeding players')

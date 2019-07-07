@@ -9,7 +9,7 @@ scrapeTeamData = async (year) => {
     const data = await page.evaluate(() => {
         let results = []
         let tableRows = document.querySelectorAll("#team-stats-per_game tbody tr");
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < tableRows.length; i++) {
             let row = {}
             let values = tableRows[i].querySelectorAll('td')
             if (values) {
