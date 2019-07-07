@@ -69,9 +69,9 @@ seedTeamSeasons = async (season) => {
     } catch (e) {
         return console.log(e)
     }
-    let data = scrapedData.filter(d => d.team_name)
-    for (let i = 0; i < data.length; i++) {
-        let currTeamData = { ...data[i] }
+
+    for (let i = 0; i < scrapedData.length; i++) {
+        let currTeamData = { ...scrapedData[i] }
         let fullName = currTeamData.team_name
         let playoffs = false
 
@@ -79,8 +79,8 @@ seedTeamSeasons = async (season) => {
         if (fullName.includes('*')) {
             playoffs = true
             fullName = fullName.slice(0, fullName.length - 1)
-            console.log(fullName)
         }
+
         let team = await Team.findOne({ fullName })
 
         let teamSeason = { season: season.id }

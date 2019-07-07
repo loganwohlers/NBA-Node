@@ -1,14 +1,22 @@
 const puppeteer = require('puppeteer')
 
 
-mapHomeAwayData = (seasonData) => {
-    let homeSorted = seasonData.team.sort((a, b) => a.team_name - b.team_name)
-    let oppSorted = seasonData.opp.sort((a, b) => a.team_name - b.team_name)
+mapHomeAwayData = ({ team, opp }) => {
+    let homeSorted = team.filter(t => t.team_name)
+        .sort((a, b) => a.team_name.localeCompare(b.team_name))
+    let oppSorted = opp.filter(t => t.team_name)
+        .sort((a, b) => a.team_name.localeCompare(b.team_name))
 
-    console.log(homeSorted)
-    console.log(oppSorted)
-
-    let final = { team: {}, opponent: {} }
+    let final = []
+    for (let i = 0; i < homeSorted.length; i++) {
+        let results = {
+            team_name: homeSorted[i].team_name,
+            team_stats: homeSorted[i],
+            opp_stats: oppSorted[i],
+        }
+        final.push(results)
+    }
+    console.log(final[0])
     return final
 }
 
@@ -19,12 +27,11 @@ scrapeTeamData = async (year) => {
     let page = await browser.newPage();
     await page.goto(URL);
     const data = await page.evaluate(() => {
-        let team = []
-        let opp = []
+        let results = { team: [], opp: [] }
 
         let teamRows = document.querySelectorAll("#team-stats-per_game tbody tr");
         let oppRows = document.querySelectorAll("#opponent-stats-per_game tbody tr");
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < teamRows.length; i++) {
             let teamData = {}
             let oppData = {}
 
@@ -34,27 +41,25 @@ scrapeTeamData = async (year) => {
             if (teamVals && oppVals) {
                 for (let i = 0; i < teamVals.length; i++) {
                     let teamStatName = teamVals[i].dataset.stat
-                    let teamStatVal = teamVals[i].innerText
 
-                    let oppStatName = oppVals[i].dataset.stat
+                    let teamStatVal = teamVals[i].innerText
                     let oppStatVal = oppVals[i].innerText
 
-
+                    //both tables have the same stats but are labeled differently-- this is to ensure all data comes in with the same labels
                     teamData[teamStatName] = teamStatVal
-                    oppData[oppStatName] = oppStatVal
+                    oppData[teamStatName] = oppStatVal
                 }
-                team.push(teamData)
-                opp.push(oppData)
+                results.team.push(teamData)
+                results.opp.push(oppData)
             }
         }
-        let results = { team, opp }
         return results
     })
     console.log('closing!')
 
-    mapHomeAwayData(data)
+    let finalData = mapHomeAwayData(data)
     await browser.close()
-    return data
+    return finalData
 }
 
 
