@@ -7,8 +7,6 @@ const router = new express.Router()
 router.get('/players', async (req, res) => {
     try {
         let query = {}
-        // let limit = 0
-
         if (Object.keys(req.query).length !== 0) {
             if (req.query.name) {
                 query = {
