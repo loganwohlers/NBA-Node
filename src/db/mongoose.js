@@ -2,11 +2,7 @@ const mongoose = require('mongoose')
 
 const { Player, Team, Season, Game, GameBox } = require('../models')
 const teams = require('../../assets/teams')
-const scrapePlayerSeasons = require('../../scrape/player-season')
-const { getBoxScores } = require('../../scrape/gameBox')
-const scrapeSeason = require('../../scrape/season')
-const scrapeTeamData = require('../../scrape/team')
-
+const { scrapeBoxScores, scrapePlayerSeasons, scrapeSeason, scrapeTeamData } = require('../../scrape')
 //ip address instead of localhost
 const URL = 'mongodb://127.0.0.1:27017/nba-api'
 
@@ -23,7 +19,7 @@ seedDB = async (connectionURL) => {
     console.log('connected to db!!')
     const db = mongoose.connection.db
 
-    // await destroyAndReseed(db)
+    await destroyAndReseed(db)
 
     console.log('db seeded')
 }
@@ -36,7 +32,7 @@ destroyAndReseed = async (db) => {
     db.dropCollection('teams')
     await seedTeams()
     await seedSeasonData(2019)
-    // await seedSeasonData(2018)
+    await seedSeasonData(2018)
 
 }
 

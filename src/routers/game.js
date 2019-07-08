@@ -10,15 +10,16 @@ router.get('/games', async (req, res) => {
         let games
         if (Object.keys(req.query).length !== 0) {
             const { season, team, team2 } = req.query
-            if (req.query.season) {
+            if (season) {
                 match = {
-                    "year": parseInt(req.query.season)
+                    "year": parseInt(season)
                 }
             }
             games = await Game.find({}).populate({
                 path: 'season',
                 match
             })
+            games = games.filter(game => game.season)
             // query = {
             //     "name": { "$regex": req.query.name, "$options": "i" }
             // }
