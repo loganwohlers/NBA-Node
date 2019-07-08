@@ -19,7 +19,7 @@ seedDB = async (connectionURL) => {
     console.log('connected to db!!')
     const db = mongoose.connection.db
 
-    await destroyAndReseed(db)
+    // await destroyAndReseed(db)
 
     console.log('db seeded')
 }

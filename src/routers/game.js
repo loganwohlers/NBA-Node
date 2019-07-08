@@ -20,6 +20,7 @@ router.get('/games', async (req, res) => {
                 match
             })
             games = games.filter(game => game.season)
+
             // query = {
             //     "name": { "$regex": req.query.name, "$options": "i" }
             // }
