@@ -27,4 +27,28 @@ router.get('/players/:id', async (req, res) => {
     }
 })
 
+// get /players?x=y&x2=y2 etc
+//filtering w/ query string
+// ?
+// req.query.x
+
+// const match = {}
+// check query string and use it to fill out this match obj
+//we get strings from query-- we need to check the query str and convert to whatever type we want
+
+// limit
+// populate has a match
+
+// .populate({
+//     path: 'x',
+//     match: {
+//         thing: 'thing to match'
+//     }
+// })
+
+
+
+
+
+
 module.exports = router
