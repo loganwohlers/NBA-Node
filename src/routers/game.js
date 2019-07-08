@@ -6,12 +6,23 @@ const router = new express.Router()
 //index
 router.get('/games', async (req, res) => {
     try {
-        const games = await Game.find({}).populate('home_team').populate('away_team').populate('season')
-        // .limit(50)
+        let query = {}
+        if (Object.keys(req.query).length !== 0) {
+            if (req.query.season) {
+                query = {
+                    "name": { "$regex": req.query.name, "$options": "i" }
+                }
+            }
+        }
+        // game query by season-- by team(s)
+
+        const games = await Game.find({}).populate('home_team', 'teamCode city fullName conference division').populate('away_team', 'teamCode city fullName conference division').populate('season', 'year description').limit(50)
         res.send(games)
+
     } catch (e) {
         res.status(400).send('service down')
     }
+
 })
 
 //show

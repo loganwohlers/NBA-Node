@@ -23,18 +23,21 @@ seedDB = async (connectionURL) => {
     console.log('connected to db!!')
     const db = mongoose.connection.db
 
-    //mass destoying all docs while seeds are tested
+    // await destroyAndReseed(db)
 
+    console.log('db seeded')
+}
+
+destroyAndReseed = async (db) => {
     db.dropCollection('players')
     db.dropCollection('games')
     db.dropCollection('gamebox')
     db.dropCollection('seasons')
     db.dropCollection('teams')
     await seedTeams()
-
     await seedSeasonData(2019)
     // await seedSeasonData(2018)
-    console.log('db seeded')
+
 }
 
 seedSeasonData = async (year) => {
@@ -50,7 +53,7 @@ seedSeasonData = async (year) => {
     }
     await seedTeamSeasons(season)
     await seedPlayers(season)
-    // await seedSchedule(season)
+    await seedSchedule(season)
 }
 
 //uses the hardcoded info on all 30 teams and turns them into Team documents
