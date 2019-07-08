@@ -62,8 +62,5 @@ scrapeTeamData = async (year) => {
 }
 
 
-
-scrapeTeamData(2019)
-
 module.exports = scrapeTeamData
 
