@@ -1,59 +1,66 @@
-const cheerio = require('cheerio')
-const request = require('request-promise')
-const teams = require('../assets/teams')
-const { Team } = require('../src/models/team')
-//test
-//test2
-//test3
-// scrapeTeamSeasons = async (yr) => {
-//     const result = []
-//     const url = 'https://www.basketball-reference.com/teams/' + code + '/' + yr + '.html'
-//     const testUrl = 'https://www.basketball-reference.com/teams/MIL/2019.html'
-//     let data
-//     try {
-//         data = await request(testUrl)
-//     } catch (e) {
-//         return console.log(e)
-//     }
-//     const $ = cheerio.load(data)
-//     const tableBody = $('#team_and_opponent').children('tbody')
-//     tableBody.find('tr').each((index, ele) => {
-//         let row = {}
-//         $(ele).find('td').each((index, ele) => {
-//             let statName = $(ele).data().stat
-//             let statVal = $(ele).text()
-//             row[statName] = statVal
-//         })
-//         result.push(row)
-//     })
-//     return result
-// }
-scrapeTeamSeasons = async (year) => {
-    const results = []
-    const url = 'https://www.basketball-reference.com/leagues/NBA_' + year + '.html'
-    // const testUrl = 'https://www.basketball-reference.com/teams/MIL/2019.html'
-    let data
-    try {
-        data = await request(url)
-        console.log('test')
-    } catch (e) {
-        return console.log(e)
+const puppeteer = require('puppeteer')
+
+
+mapHomeAwayData = ({ team, opp }) => {
+    let homeSorted = team.filter(t => t.team_name)
+        .sort((a, b) => a.team_name.localeCompare(b.team_name))
+    let oppSorted = opp.filter(t => t.team_name)
+        .sort((a, b) => a.team_name.localeCompare(b.team_name))
+
+    let final = []
+    for (let i = 0; i < homeSorted.length; i++) {
+        let results = {
+            team_name: homeSorted[i].team_name,
+            team_stats: homeSorted[i],
+            opp_stats: oppSorted[i],
+        }
+        final.push(results)
     }
-    const $ = cheerio.load(data)
-    const tableBody = $('#team-stats-per_game').children('tbody')
-    tableBody.find('tr').each((index, ele) => {
-        console.log('test')
-        let row = {}
-        $(ele).find('td').each((index, ele) => {
-            let statName = $(ele).data().stat
-            let statVal = $(ele).text()
-            row[statName] = statVal
-        })
-        console.log(row)
-        results.push(row)
-    })
-    console.log(results)
-    return results
+    return final
 }
 
-scrapeTeamSeasons(2019)
+scrapeTeamData = async (year) => {
+    console.log('starting puppeteer')
+    const browser = await puppeteer.launch();
+    const URL = 'https://www.basketball-reference.com/leagues/NBA_' + year + '.html'
+    let page = await browser.newPage();
+    await page.goto(URL);
+    const data = await page.evaluate(() => {
+        let results = { team: [], opp: [] }
+
+        let teamRows = document.querySelectorAll("#team-stats-per_game tbody tr");
+        let oppRows = document.querySelectorAll("#opponent-stats-per_game tbody tr");
+        for (let i = 0; i < teamRows.length; i++) {
+            let teamData = {}
+            let oppData = {}
+
+            let teamVals = teamRows[i].querySelectorAll('td')
+            let oppVals = oppRows[i].querySelectorAll('td')
+
+            if (teamVals && oppVals) {
+                for (let i = 0; i < teamVals.length; i++) {
+                    let teamStatName = teamVals[i].dataset.stat
+
+                    let teamStatVal = teamVals[i].innerText
+                    let oppStatVal = oppVals[i].innerText
+
+                    //both tables have the same stats but are labeled differently-- this is to ensure all data comes in with the same labels
+                    teamData[teamStatName] = teamStatVal
+                    oppData[teamStatName] = oppStatVal
+                }
+                results.team.push(teamData)
+                results.opp.push(oppData)
+            }
+        }
+        return results
+    })
+    console.log('closing browser!')
+
+    let finalData = mapHomeAwayData(data)
+    await browser.close()
+    return finalData
+}
+
+
+module.exports = scrapeTeamData
+
