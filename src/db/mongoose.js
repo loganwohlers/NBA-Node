@@ -33,7 +33,7 @@ seedDB = async (connectionURL) => {
     await seedTeams()
 
     await seedSeasonData(2019)
-    await seedSeasonData(2018)
+    // await seedSeasonData(2018)
     console.log('db seeded')
 }
 
