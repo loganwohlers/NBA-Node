@@ -6,13 +6,19 @@ const router = new express.Router()
 //index
 router.get('/players', async (req, res) => {
     try {
-        let query
+        let query = {}
+        // let limit = 0
+
         if (Object.keys(req.query).length !== 0) {
-            res.send(req.query)
-        } else {
-            const players = await Player.find({}).populate('seasons.team', 'fullName').populate('seasons.season', 'year description')
-            res.send(players)
+            if (req.query.name) {
+                query = {
+                    "name": { "$regex": req.query.name, "$options": "i" }
+                }
+            }
         }
+        const players = await Player.find(query).populate('seasons.team', 'fullName').populate('seasons.season', 'year description')
+        res.send(players)
+
     } catch (e) {
         res.status(400).send('service down')
     }
