@@ -29,11 +29,11 @@ seedDB = async (connectionURL) => {
     db.dropCollection('games')
     db.dropCollection('gamebox')
     db.dropCollection('seasons')
-    // db.dropCollection('teams')
-    // await seedTeams()
+    db.dropCollection('teams')
+    await seedTeams()
 
-    // await seedSeasonData(2019)
-    // await seedSeasonData(2018)
+    await seedSeasonData(2019)
+    await seedSeasonData(2018)
     console.log('db seeded')
 }
 
