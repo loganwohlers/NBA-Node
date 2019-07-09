@@ -4,6 +4,9 @@ const { Player } = require('../models/player')
 const router = new express.Router()
 
 //index
+//pagination w/ limit/skip
+// limit=25&skip=0
+// parseInt(req.query.limit)
 router.get('/players', async (req, res) => {
     try {
         let query = {}

@@ -9,7 +9,7 @@ router.get('/games', async (req, res) => {
         let match = {}
         let games
         if (Object.keys(req.query).length !== 0) {
-            const { season, team, team2 } = req.query
+            const { season, team } = req.query
             if (season) {
                 match = {
                     "year": parseInt(season)

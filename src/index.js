@@ -30,7 +30,6 @@ router.get('/', async (req, res) => {
     }
 })
 
-
 //run the server
 app.listen(port, () => {
     console.log('server up on port', port)
