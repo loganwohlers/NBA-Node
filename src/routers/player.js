@@ -4,10 +4,22 @@ const { Player } = require('../models/player')
 const router = new express.Router()
 
 //index
+//pagination w/ limit/skip
+// limit=25&skip=0
+// parseInt(req.query.limit)
 router.get('/players', async (req, res) => {
     try {
-        const players = await Player.find({}).populate('seasons.team', 'fullName').populate('seasons.season', 'year description')
+        let query = {}
+        if (Object.keys(req.query).length !== 0) {
+            if (req.query.name) {
+                query = {
+                    "name": { "$regex": req.query.name, "$options": "i" }
+                }
+            }
+        }
+        const players = await Player.find(query).populate('seasons.team', 'fullName').populate('seasons.season', 'year description')
         res.send(players)
+
     } catch (e) {
         res.status(400).send('service down')
     }
@@ -45,10 +57,5 @@ router.get('/players/:id', async (req, res) => {
 //         thing: 'thing to match'
 //     }
 // })
-
-
-
-
-
 
 module.exports = router

@@ -160,7 +160,7 @@ const advancedBoxScehma = new mongoose.Schema({
     }
 })
 
-const allBoxSchmea = new mongoose.Schema({
+const allBoxSchema = new mongoose.Schema({
     homeBasicBox: [basicBoxScehma],
     homeAdvancedBox: [advancedBoxScehma],
     awayBasicBox: [basicBoxScehma],
@@ -168,6 +168,6 @@ const allBoxSchmea = new mongoose.Schema({
 })
 
 
-const GameBox = mongoose.model('GameBox', allBoxSchmea)
+const GameBox = mongoose.model('GameBox', allBoxSchema)
 
 module.exports = { basicBoxScehma, advancedBoxScehma, GameBox }

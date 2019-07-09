@@ -6,12 +6,37 @@ const router = new express.Router()
 //index
 router.get('/games', async (req, res) => {
     try {
-        const games = await Game.find({}).populate('home_team').populate('away_team').populate('season')
-        // .limit(50)
+        let match = {}
+        let games
+        if (Object.keys(req.query).length !== 0) {
+            const { season, team } = req.query
+            if (season) {
+                match = {
+                    "year": parseInt(season)
+                }
+            }
+            games = await Game.find({}).populate({
+                path: 'season',
+                match
+            })
+            games = games.filter(game => game.season)
+
+            // query = {
+            //     "name": { "$regex": req.query.name, "$options": "i" }
+            // }
+            // null, { tagName: { $in: ['funny', 'politics'] } } )
+            res.send(games)
+            // .populate('home_team', 'teamCode city fullName conference division').populate('away_team', 'teamCode city fullName conference division').populate('season', 'year description')
+        } else {
+            games = await Game.find({}).populate('home_team', 'teamCode city fullName conference division').populate('away_team', 'teamCode city fullName conference division').populate('season', 'year description').limit(50)
+        }
+        // const gamesData = await Game.find(query).populate('home_team', 'teamCode city fullName conference division').populate('away_team', 'teamCode city fullName conference division').populate('season', 'year description').limit(50)
         res.send(games)
+
     } catch (e) {
-        res.status(400).send('service down')
+        res.status(400).send(e)
     }
+
 })
 
 //show

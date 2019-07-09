@@ -20,18 +20,21 @@ seedDB = async (connectionURL) => {
     console.log('connected to db!!')
     const db = mongoose.connection.db
 
-    //mass destoying all docs while seeds are tested
+    // await destroyAndReseed(db)
 
+    console.log('db seeded')
+}
+
+destroyAndReseed = async (db) => {
     db.dropCollection('players')
     db.dropCollection('games')
     db.dropCollection('gamebox')
     db.dropCollection('seasons')
     db.dropCollection('teams')
     await seedTeams()
-
     await seedSeasonData(2019)
     await seedSeasonData(2018)
-    console.log('db seeded')
+
 }
 
 seedSeasonData = async (year) => {
@@ -47,7 +50,7 @@ seedSeasonData = async (year) => {
     }
     await seedTeamSeasons(season)
     await seedPlayers(season)
-    // await seedSchedule(season)
+    await seedSchedule(season)
 }
 
 //uses the hardcoded info on all 30 teams and turns them into Team documents
@@ -145,7 +148,7 @@ seedSchedule = async (season) => {
 
     let dataObj = [...seasonData]
     //for testing just seeding first 50 games
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 10; i++) {
         let { home_team_name, visitor_team_name } = dataObj[i]
         let homeTeam = await Team.findOne({ fullName: home_team_name })
         let awayTeam = await Team.findOne({ fullName: visitor_team_name })
@@ -162,7 +165,7 @@ seedSchedule = async (season) => {
         console.log(i)
     }
     try {
-        let sample = dataObj.slice(0, 50)
+        let sample = dataObj.slice(0, 10)
         let saved = await Game.insertMany(sample)
         console.log('seeded games/boxscores!')
     } catch (e) {
