@@ -1,8 +1,9 @@
 const mongoose = require('mongoose')
 
 const { Player, Team, Season, Game, GameBox } = require('../models')
-const teams = require('../../assets/teams')
 const { scrapeBoxScores, scrapePlayerSeasons, scrapeSeason, scrapeTeamData } = require('../../scrape')
+const teams = require('../../assets/teams')
+
 //ip address instead of localhost
 const URL = 'mongodb://127.0.0.1:27017/nba-api'
 
@@ -152,7 +153,7 @@ seedSchedule = async (season) => {
         let homeTeam = await Team.findOne({ fullName: home_team_name })
         let awayTeam = await Team.findOne({ fullName: visitor_team_name })
 
-        let box = await getBoxScores(dataObj[i])
+        let box = await scrapeBoxScores(dataObj[i])
         let newBox = await convertBoxRefs(box)
         let gameBox = new GameBox(newBox)
         gameBox.save()

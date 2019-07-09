@@ -1,43 +1,8 @@
 const cheerio = require('cheerio')
 const request = require('request-promise')
 const teamCodeMap = require('../assets/teamCodeMap')
-const scrapeSeason = require('./season')
 
-// const exampleData = {
-//     _id: "5d16c72862c6ac637acc0bf5",
-//     gameCode: "201810160BOS",
-//     date: "20181016",
-//     game_start_time: "8:00p",
-//     visitor_pts: "87",
-//     home_pts: "105",
-//     overtimes: "",
-//     attendance: "18,624",
-//     game_remarks: "",
-//     home_team_name: "Boston Celtics",
-//     visitor_team_name: "Philadelphia 76ers"
-// }
-
-// seasonBoxScores = async (games) => {
-//     // let games
-//     // try {
-//     //     games = await scrapeSeason(2019)
-//     // } catch (e) {
-//     //     return console.log(e)
-//     // }
-//     let results = []
-//     for (let i = 0; i < 5; i++) {
-//         let currGameBox
-//         try {
-//             currGameBox = await getBoxScores(games[i])
-//         } catch (e) {
-//             return console.log(e)
-//         }
-//         results.push(currGameBox)
-//     }
-//     console.log(results[0].homeBoxScores.basic)
-// }
-
-getBoxScores = async (gameData) => {
+scrapeBoxScores = async (gameData) => {
     let gameURL = 'https://www.basketball-reference.com/boxscores/' + gameData.gameCode + '.html'
     console.log(gameURL)
     try {
@@ -94,10 +59,8 @@ scrapeBox = async (tableBody) => {
     return results
 }
 
-module.exports = { getBoxScores, scrapeBox }
+module.exports = { scrapeBoxScores, scrapeBox }
 
-// seasonBoxScores()
-// getBoxScores(exampleData)
 
 
 
