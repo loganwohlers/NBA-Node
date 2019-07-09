@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { allBoxSchema } = require('./gameBox')
 
 const gameSchema = new mongoose.Schema({
     gameCode: {
@@ -30,10 +31,7 @@ const gameSchema = new mongoose.Schema({
         type: String,
         trim: true,
     },
-    box_scores: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'GameBox',
-    },
+    box_scores: allBoxSchema,
     overtimes: {
         type: String,
         trim: true,

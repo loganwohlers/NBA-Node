@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const basicBoxScehma = new mongoose.Schema({
+const basicBoxSchema = new mongoose.Schema({
     player: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Player',
@@ -92,7 +92,7 @@ const basicBoxScehma = new mongoose.Schema({
     }
 })
 
-const advancedBoxScehma = new mongoose.Schema({
+const advancedBoxSchema = new mongoose.Schema({
     player: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Player',
@@ -161,13 +161,13 @@ const advancedBoxScehma = new mongoose.Schema({
 })
 
 const allBoxSchema = new mongoose.Schema({
-    homeBasicBox: [basicBoxScehma],
-    homeAdvancedBox: [advancedBoxScehma],
-    awayBasicBox: [basicBoxScehma],
-    awayAdvancedBox: [advancedBoxScehma],
+    homeBasicBox: [basicBoxSchema],
+    homeAdvancedBox: [advancedBoxSchema],
+    awayBasicBox: [basicBoxSchema],
+    awayAdvancedBox: [advancedBoxSchema],
 })
 
 
 const GameBox = mongoose.model('GameBox', allBoxSchema)
 
-module.exports = { basicBoxScehma, advancedBoxScehma, GameBox }
+module.exports = { basicBoxSchema, advancedBoxSchema, GameBox, allBoxSchema }

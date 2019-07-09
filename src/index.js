@@ -3,7 +3,7 @@ const express = require('express')
 //it still runs this file-- which is where we connect to our db 
 require('./db/mongoose')
 
-const { playerRouter, gameRouter, gameBoxRouter, teamRouter } = require('./routers')
+const { playerRouter, gameRouter, teamRouter } = require('./routers')
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -14,7 +14,6 @@ const router = new express.Router()
 //routers to use
 app.use(router)
 app.use(playerRouter)
-app.use(gameBoxRouter)
 app.use(gameRouter)
 app.use(teamRouter)
 
