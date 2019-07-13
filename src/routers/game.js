@@ -7,30 +7,54 @@ const router = new express.Router()
 router.get('/games', async (req, res) => {
     try {
         let match = {}
+        let query = false
         let games
         if (Object.keys(req.query).length !== 0) {
-            const { season, team } = req.query
+            const { season } = req.query
             if (season) {
+                query = true
                 match = {
                     "year": parseInt(season)
                 }
             }
-            games = await Game.find({}).populate({
-                path: 'season',
-                match
-            })
-            games = games.filter(game => game.season)
-
-            // query = {
-            //     "name": { "$regex": req.query.name, "$options": "i" }
-            // }
-            // null, { tagName: { $in: ['funny', 'politics'] } } )
-            res.send(games)
-            // .populate('home_team', 'teamCode city fullName conference division').populate('away_team', 'teamCode city fullName conference division').populate('season', 'year description')
-        } else {
-            games = await Game.find({}).populate('home_team', 'teamCode city fullName conference division').populate('away_team', 'teamCode city fullName conference division').populate('season', 'year description').limit(50)
         }
-        // const gamesData = await Game.find(query).populate('home_team', 'teamCode city fullName conference division').populate('away_team', 'teamCode city fullName conference division').populate('season', 'year description').limit(50)
+        games = await Game.find({}).populate('home_team', 'teamCode city fullName conference division').populate('away_team', 'teamCode city fullName conference division').populate({
+            path: 'season',
+            match,
+            select: 'year description'
+        }
+        ).populate('season')
+            .populate(
+                {
+                    path: 'box_scores.homeBasicBox.player',
+                    model: 'Player',
+                    select: 'name'
+                }
+            )
+            .populate(
+                {
+                    path: 'box_scores.homeAdvancedBox.player',
+                    model: 'Player',
+                    select: 'name'
+                }
+            )
+            .populate(
+                {
+                    path: 'box_scores.awayBasicBox.player',
+                    model: 'Player',
+                    select: 'name'
+                }
+            )
+            .populate(
+                {
+                    path: 'box_scores.awayAdvancedBox.player',
+                    model: 'Player',
+                    select: 'name'
+                }
+            )
+        if (query) {
+            games = games.filter(game => game.season)
+        }
         res.send(games)
 
     } catch (e) {
