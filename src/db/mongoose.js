@@ -1,5 +1,3 @@
-const mongoose = require('mongoose')
-
 const { Player, Team, Season, Game } = require('../models')
 const { scrapeBoxScores, scrapePlayerSeasons, scrapeSeason, scrapeTeamData } = require('../../scrape')
 const teams = require('../../assets/teams')
@@ -207,4 +205,4 @@ convertPlayerToID = async (name) => {
     }
 }
 
-seedDB(URL)
+// seedDB(URL)

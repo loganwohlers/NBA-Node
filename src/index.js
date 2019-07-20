@@ -1,7 +1,7 @@
 const express = require('express')
 //we don't HAVE to save this to a variable- when we require here 
 //it still runs this file-- which is where we connect to our db 
-require('./db/mongoose')
+require('./db/pg')
 
 const { playerRouter, gameRouter, teamRouter } = require('./routers')
 
