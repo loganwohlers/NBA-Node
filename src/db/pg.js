@@ -32,7 +32,7 @@ seedSeason = async (yr) => {
     let description = (year - 1) + '-' + year + ' NBA Season'
     const values = [yr, description]
     try {
-        const res = await client.query(text, values)
+        await client.query(text, values)
         return console.log('all seasons seeded')
     }
     catch (e) {

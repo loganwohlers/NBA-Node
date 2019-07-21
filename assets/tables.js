@@ -34,4 +34,42 @@ CREATE TABLE IF NOT EXISTS player_seasons
     FOREIGN KEY(player_id) REFERENCES players(player_id)
 )`
 
+
+// team: {
+//     type: mongoose.Schema.Types.ObjectId,
+//         ref: 'Team',
+//     },
+// season: {
+//     type: mongoose.Schema.Types.ObjectId,
+//         ref: 'Season',
+//     },
+//age
+// g
+// gs
+// pos
+// fg2_per_g
+// fg2a_per_g
+// fg2_pct
+// trb_per_g
+// mp_per_g
+// fg_per_g
+// fga_per_g
+// fg_pct
+// fg3_per_g
+// fg3a_per_g
+// fg3_pct
+// efg_pct
+// ft_per_g
+// fta_per_g
+// ft_pct
+// orb_per_g
+// drb_per_g
+// ast_per_g
+// stl_per_g
+// blk_per_g
+// tov_per_g
+// pf_per_g
+// pts_per_g
+
+
 module.exports = { teams_table, seasons_table, players_table, player_seasons_table }
