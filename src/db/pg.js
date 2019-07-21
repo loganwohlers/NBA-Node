@@ -25,6 +25,7 @@ pgConnect = async () => {
 }
 
 seedSeason = async (yr) => {
+    //create the actual season row
     const text = `
     INSERT INTO seasons (year, description)
     VALUES ($1, $2)
@@ -32,7 +33,9 @@ seedSeason = async (yr) => {
     let description = (yr - 1) + '-' + yr + ' NBA Season'
     const values = [yr, description]
     try {
-        await client.query(text, values)
+        let result = await client.query(text, values)
+        let season = result.rows[0]
+        let players = seedPlayers(season)
         return console.log('all seasons seeded')
     }
     catch (e) {
@@ -50,39 +53,83 @@ seedPlayers = async (season) => {
     } catch (e) {
         return console.log(e)
     }
+    console.log(scrapedData[0])
     let data = scrapedData.filter(d => d.player)
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < 2; i++) {
         let name = data[i].player
 
         //this is a strange mongo thing-- it doesn't like when you work with the same
         //doc multiple times in a row?  by doing a new query here for nothing the program
         //works as expected*****fix
-        let players = await Player.findOne({})
+        // let players = await Player.findOne({})
 
         //checking for if this player document exists- if not create new player 
-        let player = await Player.findOne({ name })
-        if (!player) {
-            player = new Player({
-                name
-            })
+        const query = {
+            // give the query a unique name
+            name: 'fetch-player',
+            text: 'SELECT * FROM players WHERE name = $1',
+            values: [name]
         }
-        // creating the object that represents a played season and adding it to players seasons array
-        let obj = { ...data[i] }
-        if (obj.team_id !== 'TOT') {
-            let team = await Team.findOne({ teamCode: obj.team_id })
-            if (team) {
-                obj.team = team._id
-                obj.season = season._id
-                player.seasons.push(obj)
-                player.save()
-            } else {
-                return console.log('could not find team code')
-            }
+        try {
+            let res = await client.query(query)
+            console.log(res.rows[0])
+        } catch (e) {
+            return console.log(e)
         }
-    }
-    console.log('players seeded')
-}
 
+
+
+        //     if (!player) {
+        //         player = new Player({
+        //             name
+        //         })
+        //     }
+        //     // creating the object that represents a played season and adding it to players seasons array
+        //     let obj = { ...data[i] }
+        //     if (obj.team_id !== 'TOT') {
+        //         let team = await Team.findOne({ teamCode: obj.team_id })
+        //         if (team) {
+        //             obj.team = team._id
+        //             obj.season = season._id
+        //             player.seasons.push(obj)
+        //             player.save()
+        //         } else {
+        //             return console.log('could not find team code')
+        //         }
+        //     }
+        // }
+        // console.log('players seeded')
+    }
+}
+// { player: 'Álex Abrines',
+//   pos: 'SG',
+//   age: '25',
+//   team_id: 'OKC',
+//   g: '31',
+//   gs: '2',
+//   mp_per_g: '19.0',
+//   fg_per_g: '1.8',
+//   fga_per_g: '5.1',
+//   fg_pct: '.357',
+//   fg3_per_g: '1.3',
+//   fg3a_per_g: '4.1',
+//   fg3_pct: '.323',
+//   fg2_per_g: '0.5',
+//   fg2a_per_g: '1.0',
+//   fg2_pct: '.500',
+//   efg_pct: '.487',
+//   ft_per_g: '0.4',
+//   fta_per_g: '0.4',
+//   ft_pct: '.923',
+//   orb_per_g: '0.2',
+//   drb_per_g: '1.4',
+//   trb_per_g: '1.5',
+//   ast_per_g: '0.6',
+//   stl_per_g: '0.5',
+//   blk_per_g: '0.2',
+//   tov_per_g: '0.5',
+//   pf_per_g: '1.7',
+//   pts_per_g: '5.3' }
 seedTeams = async () => {
     //if table is empty then we'll populate data
     let { rowCount } = await client.query('SELECT * FROM teams LIMIT 1;')
