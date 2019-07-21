@@ -30,20 +30,40 @@ CREATE TABLE IF NOT EXISTS player_seasons
 (
     player_season_id SERIAL UNIQUE PRIMARY KEY,
     player_id INTEGER,
-    name VARCHAR(255) UNIQUE NOT NULL,
+    age VARCHAR(255),
+    g VARCHAR(255),
+    gs VARCHAR(255),
+    pos VARCHAR(255),
+    fg2_per_g VARCHAR(255),
+    fg2a_per_g VARCHAR(255),
+    fg2_pct VARCHAR(255),
+    trb_per_g VARCHAR(255),
+    mp_per_g VARCHAR(255),
+    fg_per_g VARCHAR(255),
+    fga_per_g VARCHAR(255),
+    fg_pct VARCHAR(255),
+    fg3_per_g VARCHAR(255),
+    fg3a_per_g VARCHAR(255),
+    fg3_pct VARCHAR(255),
+    efg_pct VARCHAR(255),
+    ft_per_g VARCHAR(255),
+    fta_per_g VARCHAR(255),
+    ft_pct VARCHAR(255),
+    orb_per_g VARCHAR(255),
+    drb_per_g VARCHAR(255),
+    ast_per_g VARCHAR(255),
+    stl_per_g VARCHAR(255),
+    blk_per_g VARCHAR(255),
+    tov_per_g VARCHAR(255),
+    pf_per_g VARCHAR(255),
+    pts_per_g VARCHAR(255),
     FOREIGN KEY(player_id) REFERENCES players(player_id)
 )`
 
+//rest of player_seasons:
 
-// team: {
-//     type: mongoose.Schema.Types.ObjectId,
-//         ref: 'Team',
-//     },
-// season: {
-//     type: mongoose.Schema.Types.ObjectId,
-//         ref: 'Season',
-//     },
-//age
+// team_season_id
+// age
 // g
 // gs
 // pos

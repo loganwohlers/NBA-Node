@@ -29,7 +29,7 @@ seedSeason = async (yr) => {
     INSERT INTO seasons (year, description)
     VALUES ($1, $2)
     RETURNING *;`
-    let description = (year - 1) + '-' + year + ' NBA Season'
+    let description = (yr - 1) + '-' + yr + ' NBA Season'
     const values = [yr, description]
     try {
         await client.query(text, values)
