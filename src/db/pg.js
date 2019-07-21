@@ -35,7 +35,7 @@ seedSeason = async (yr) => {
     try {
         let result = await client.query(text, values)
         let season = result.rows[0]
-        let players = seedPlayers(season)
+        let players = await seedPlayers(season)
         return console.log('all seasons seeded')
     }
     catch (e) {
@@ -58,16 +58,13 @@ seedPlayers = async (season) => {
     for (let i = 0; i < 2; i++) {
         let name = data[i].player
 
-        //this is a strange mongo thing-- it doesn't like when you work with the same
-        //doc multiple times in a row?  by doing a new query here for nothing the program
-        //works as expected*****fix
-        // let players = await Player.findOne({})
-
-        //checking for if this player document exists- if not create new player 
+        //checking for if this player exists- if not create new player 
         const query = {
             // give the query a unique name
             name: 'fetch-player',
-            text: 'SELECT * FROM players WHERE name = $1',
+            text: `INSERT INTO players(name) VALUES($1) ON CONFLICT(name) DO NOTHING RETURNING *;`,
+            //         INSERT INTO distributors(did, dname) VALUES(7, 'Redline GmbH')
+            // ON CONFLICT(did) DO NOTHING;
             values: [name]
         }
         try {
@@ -76,9 +73,6 @@ seedPlayers = async (season) => {
         } catch (e) {
             return console.log(e)
         }
-
-
-
         //     if (!player) {
         //         player = new Player({
         //             name
