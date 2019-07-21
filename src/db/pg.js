@@ -1,6 +1,9 @@
 const { Client } = require('pg')
+
 const { teams_table, seasons_table, players_table, player_seasons_table } = require('../../assets/tables')
+const allTableNames = ['teams', 'seasons', 'players', 'player_seasons']
 const teams = require('../../assets/teams')
+
 
 const connectionString = 'postgresql://postgres:password@localhost:5432/nbanode'
 
@@ -11,16 +14,10 @@ const client = new Client({
 pgConnect = async () => {
     await client.connect()
     try {
-        const created = await createTables([teams_table, seasons_table, players_table, player_seasons_table])
-        //  players_table, player_seasons_table])
+        await dropTables(allTableNames)
+        // await createTables([teams_table, seasons_table, players_table, player_seasons_table])
+        // await seedTeams()
 
-        // const cleared = await clearTables(['teams'])
-        // console.log(cleared)
-
-        // const teamSeed = await seedTeams()
-        // console.log(teamSeed)
-
-        // console.log('tables created!')
     } catch (err) {
         console.log(err.stack)
     }
@@ -44,7 +41,7 @@ seedTeams = async () => {
             let values = [name, fullName, city, conference, division, teamCode]
             const res = await client.query(text, values)
         }
-        return 'all teams seeded!'
+        console.log('all teams seeded!')
     } catch (e) {
         return console.log(e)
     }
@@ -67,9 +64,9 @@ createTables = async table_names => {
 dropTables = async table_names => {
     try {
         for (let i = 0; i < table_names.length; i++) {
-            await client.query(table_names[i])
+            await client.query(`DROP TABLE IF EXISTS ${table_names[i]} cascade;`)
         }
-        return 'tables dropped!'
+        console.log('tables dropped!')
     } catch (e) {
         return console.log(e)
     }
