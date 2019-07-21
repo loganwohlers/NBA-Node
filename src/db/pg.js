@@ -8,12 +8,16 @@ const client = new Client({
     connectionString
 })
 
+
+
 pgConnect = async () => {
     await client.connect()
     try {
-        const tt = await client.query(teams_table)
-        await seedTeams()
-        console.log('tables created!')
+        const cleared = await clearTables(['teams'])
+        console.log(cleared)
+
+        // await seedTeams()
+        // console.log('tables created!')
     } catch (err) {
         console.log(err.stack)
     }
@@ -33,6 +37,25 @@ seedTeams = async () => {
             const res = await client.query(text, values)
             console.log(res)
         }
+    } catch (e) {
+        return console.log(e)
+    }
+}
+
+createTables = async table_names => {
+    for (let i = 0; i < table_names.length; i++) {
+        await client.query(table_names[i])
+    }
+    // const ctt = await client.query(teams_table)
+}
+
+
+clearTables = async (table_names) => {
+    try {
+        for (let i = 0; i < table_names.length; i++) {
+            await client.query(`DELETE FROM ${table_names[i]}`)
+        }
+        return 'tables cleared!'
     } catch (e) {
         return console.log(e)
     }
