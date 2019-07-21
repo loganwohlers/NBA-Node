@@ -1,5 +1,5 @@
 const teams_table = `
-CREATE TABLE teams
+CREATE TABLE IF NOT EXISTS teams
 (
     team_id SERIAL UNIQUE PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,
@@ -11,11 +11,27 @@ CREATE TABLE teams
 )`
 
 const seasons_table = `
-CREATE TABLE seasons
+CREATE TABLE IF NOT EXISTS seasons
 (
     season_id SERIAL UNIQUE PRIMARY KEY,
     year INTEGER UNIQUE NOT NULL,
-    description VARCHAR(255) UNIQUE NOT NULL,
+    description VARCHAR(255) UNIQUE NOT NULL
 )`
 
-module.exports = { teams_table, seasons_table }
+const players_table = `
+CREATE TABLE IF NOT EXISTS players
+(
+    player_id SERIAL UNIQUE PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL
+)`
+
+const player_seasons_table = `
+CREATE TABLE IF NOT EXISTS player_seasons
+(
+    player_season_id SERIAL UNIQUE PRIMARY KEY,
+    player_id INTEGER,
+    name VARCHAR(255) UNIQUE NOT NULL,
+    FOREIGN KEY(player_id) REFERENCES players(player_id)
+)`
+
+module.exports = { teams_table, seasons_table, players_table, player_seasons_table }

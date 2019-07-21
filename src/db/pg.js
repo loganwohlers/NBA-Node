@@ -1,5 +1,5 @@
 const { Client } = require('pg')
-const { teams_table, seasons_table } = require('../../assets/tables')
+const { teams_table, seasons_table, players_table, player_seasons_table } = require('../../assets/tables')
 const teams = require('../../assets/teams')
 
 const connectionString = 'postgresql://postgres:password@localhost:5432/nbanode'
@@ -8,15 +8,18 @@ const client = new Client({
     connectionString
 })
 
-
-
 pgConnect = async () => {
     await client.connect()
     try {
-        const cleared = await clearTables(['teams'])
-        console.log(cleared)
+        const created = await createTables([teams_table, seasons_table, players_table, player_seasons_table])
+        //  players_table, player_seasons_table])
 
-        await seedTeams()
+        // const cleared = await clearTables(['teams'])
+        // console.log(cleared)
+
+        // const teamSeed = await seedTeams()
+        // console.log(teamSeed)
+
         // console.log('tables created!')
     } catch (err) {
         console.log(err.stack)
@@ -39,22 +42,38 @@ seedTeams = async () => {
         for (let i = 0; i < teams.length; i++) {
             const { name, fullName, city, conference, division, teamCode } = teams[i]
             let values = [name, fullName, city, conference, division, teamCode]
-
             const res = await client.query(text, values)
-            console.log(res.rows[0])
         }
+        return 'all teams seeded!'
     } catch (e) {
         return console.log(e)
     }
 }
 
 createTables = async table_names => {
-    for (let i = 0; i < table_names.length; i++) {
-        await client.query(table_names[i])
+    try {
+        for (let i = 0; i < table_names.length; i++) {
+            console.log(i)
+            console.log(table_names[i].slice(0, 50))
+            await client.query(table_names[i])
+        }
+        return 'tables created!'
+
+    } catch (e) {
+        return console.log(e)
     }
-    // const ctt = await client.query(teams_table)
 }
 
+dropTables = async table_names => {
+    try {
+        for (let i = 0; i < table_names.length; i++) {
+            await client.query(table_names[i])
+        }
+        return 'tables dropped!'
+    } catch (e) {
+        return console.log(e)
+    }
+}
 
 clearTables = async (table_names) => {
     try {
