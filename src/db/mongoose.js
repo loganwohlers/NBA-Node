@@ -31,7 +31,6 @@ destroyAndReseed = async (db) => {
     await seedTeams()
     await seedSeasonData(2019)
     // await seedSeasonData(2018)
-
 }
 
 seedSeasonData = async (year) => {
