@@ -55,21 +55,20 @@ seedPlayers = async (season) => {
     }
     console.log(scrapedData[0])
     let data = scrapedData.filter(d => d.player)
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < data.length; i++) {
         let name = data[i].player
 
-        //checking for if this player exists- if not create new player 
+        //checking for if this player exists- if not create new player
+        //on conflict is the current find or create by workaround
         const query = {
             // give the query a unique name
             name: 'fetch-player',
             text: `INSERT INTO players(name) VALUES($1) ON CONFLICT(name) DO NOTHING RETURNING *;`,
-            //         INSERT INTO distributors(did, dname) VALUES(7, 'Redline GmbH')
-            // ON CONFLICT(did) DO NOTHING;
             values: [name]
         }
         try {
             let res = await client.query(query)
-            console.log(res.rows[0])
+            console.log(res.rows[0] || 'multiple player seasons')
         } catch (e) {
             return console.log(e)
         }
