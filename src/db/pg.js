@@ -53,7 +53,6 @@ seedPlayers = async (season) => {
     } catch (e) {
         return console.log(e)
     }
-    console.log(scrapedData[0])
     let data = scrapedData.filter(d => d.player)
     for (let i = 0; i < data.length; i++) {
         let name = data[i].player
@@ -61,37 +60,24 @@ seedPlayers = async (season) => {
         //checking for if this player exists- if not create new player
         //on conflict is the current find or create by workaround
         const query = {
-            // give the query a unique name
             name: 'fetch-player',
             text: `INSERT INTO players(name) VALUES($1) ON CONFLICT(name) DO NOTHING RETURNING *;`,
             values: [name]
         }
+
+        const query = {
+            name: 'playerseason',
+            text: `INSERT INTO player_seasons(player_id, age, g, gs,pos, fg2_per_g,
+                fg2a_per_g, fg2a_pct, trb_per_g, mp_per_g, fg_per_g,fga_per_g, fg_pct
+                 fg3_per_g) VALUES($1) ON CONFLICT(name) DO NOTHING RETURNING *;`,
+            values: [name]
+        }
         try {
             let res = await client.query(query)
-            console.log(res.rows[0] || 'multiple player seasons')
+            // console.log(res.rows[0] || 'multiple player seasons')
         } catch (e) {
             return console.log(e)
         }
-        //     if (!player) {
-        //         player = new Player({
-        //             name
-        //         })
-        //     }
-        //     // creating the object that represents a played season and adding it to players seasons array
-        //     let obj = { ...data[i] }
-        //     if (obj.team_id !== 'TOT') {
-        //         let team = await Team.findOne({ teamCode: obj.team_id })
-        //         if (team) {
-        //             obj.team = team._id
-        //             obj.season = season._id
-        //             player.seasons.push(obj)
-        //             player.save()
-        //         } else {
-        //             return console.log('could not find team code')
-        //         }
-        //     }
-        // }
-        // console.log('players seeded')
     }
 }
 // { player: 'Álex Abrines',
@@ -123,6 +109,7 @@ seedPlayers = async (season) => {
 //   tov_per_g: '0.5',
 //   pf_per_g: '1.7',
 //   pts_per_g: '5.3' }
+
 seedTeams = async () => {
     //if table is empty then we'll populate data
     let { rowCount } = await client.query('SELECT * FROM teams LIMIT 1;')
