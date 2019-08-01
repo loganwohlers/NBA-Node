@@ -10,6 +10,7 @@ scrapePlayerSeasons = async (yr) => {
     } catch (e) {
         return console.log(e)
     }
+
     const $ = cheerio.load(data)
     const tableBody = $('#per_game_stats').children('tbody')
     tableBody.find('tr').each((index, ele) => {
