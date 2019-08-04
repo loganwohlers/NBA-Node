@@ -65,13 +65,13 @@ seedPlayers = async (season) => {
             values: [name]
         }
 
-        const query = {
-            name: 'playerseason',
-            text: `INSERT INTO player_seasons(player_id, age, g, gs,pos, fg2_per_g,
-                fg2a_per_g, fg2a_pct, trb_per_g, mp_per_g, fg_per_g,fga_per_g, fg_pct
-                 fg3_per_g) VALUES($1) ON CONFLICT(name) DO NOTHING RETURNING *;`,
-            values: [name]
-        }
+        // const query = {
+        //     name: 'playerseason',
+        //     text: `INSERT INTO player_seasons(player_id, age, g, gs,pos, fg2_per_g,
+        //         fg2a_per_g, fg2a_pct, trb_per_g, mp_per_g, fg_per_g,fga_per_g, fg_pct
+        //          fg3_per_g) VALUES($1) ON CONFLICT(name) DO NOTHING RETURNING *;`,
+        //     values: [name]
+        // }
         try {
             let res = await client.query(query)
             // console.log(res.rows[0] || 'multiple player seasons')
@@ -80,35 +80,6 @@ seedPlayers = async (season) => {
         }
     }
 }
-// { player: 'Álex Abrines',
-//   pos: 'SG',
-//   age: '25',
-//   team_id: 'OKC',
-//   g: '31',
-//   gs: '2',
-//   mp_per_g: '19.0',
-//   fg_per_g: '1.8',
-//   fga_per_g: '5.1',
-//   fg_pct: '.357',
-//   fg3_per_g: '1.3',
-//   fg3a_per_g: '4.1',
-//   fg3_pct: '.323',
-//   fg2_per_g: '0.5',
-//   fg2a_per_g: '1.0',
-//   fg2_pct: '.500',
-//   efg_pct: '.487',
-//   ft_per_g: '0.4',
-//   fta_per_g: '0.4',
-//   ft_pct: '.923',
-//   orb_per_g: '0.2',
-//   drb_per_g: '1.4',
-//   trb_per_g: '1.5',
-//   ast_per_g: '0.6',
-//   stl_per_g: '0.5',
-//   blk_per_g: '0.2',
-//   tov_per_g: '0.5',
-//   pf_per_g: '1.7',
-//   pts_per_g: '5.3' }
 
 seedTeams = async () => {
     //if table is empty then we'll populate data
